@@ -1,5 +1,7 @@
 # Getting Started
 
+This is a backend server api
+
 ### Reference Documentation
 
 For further reference, please consider the following sections:
