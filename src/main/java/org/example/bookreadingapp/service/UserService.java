@@ -8,17 +8,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@RequestMapping("/api/user/me")
 public class UserService {
     private final UserRepository userRepository;
 
     public UserDto getCurrentUser() {
-        String userId = (String) Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getPrincipal();
+        String userId = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<User> user = userRepository.findByEmail(userId);
         return user.map(value -> UserDto.builder()
                 .email(value.getEmail())
