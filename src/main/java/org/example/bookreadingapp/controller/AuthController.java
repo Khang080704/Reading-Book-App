@@ -7,6 +7,7 @@ import org.example.bookreadingapp.dto.TokenResponse;
 import org.example.bookreadingapp.dto.UserDto;
 import org.example.bookreadingapp.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +27,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<UserDto> registerUser(@Valid @RequestBody RegisterRequest request) {
         UserDto userDto1 = authService.register(request.getEmail(), request.getPassword(), request.getUsername());
-        return ResponseEntity.ok(userDto1);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userDto1);
     }
 
     @PostMapping("/login")
