@@ -1,7 +1,7 @@
 package org.example.bookreadingapp.exception.handler;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.bookreadingapp.dto.ExceptionResponse;
+import org.example.bookreadingapp.dto.exception.ExceptionResponse;
 import org.example.bookreadingapp.exception.definitions.EmailExists;
 import org.example.bookreadingapp.exception.definitions.WrongCredentials;
 import org.springframework.http.HttpStatus;

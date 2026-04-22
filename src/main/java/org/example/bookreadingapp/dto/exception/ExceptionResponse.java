@@ -1,4 +1,4 @@
-package org.example.bookreadingapp.dto;
+package org.example.bookreadingapp.dto.exception;
 
 import lombok.Data;
 import org.springframework.http.HttpStatus;

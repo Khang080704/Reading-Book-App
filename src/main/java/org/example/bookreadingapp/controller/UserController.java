@@ -1,7 +1,7 @@
 package org.example.bookreadingapp.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.bookreadingapp.dto.UserDto;
+import org.example.bookreadingapp.dto.auth.UserDto;
 import org.example.bookreadingapp.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

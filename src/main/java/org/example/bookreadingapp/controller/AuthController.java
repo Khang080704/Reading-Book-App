@@ -1,10 +1,10 @@
 package org.example.bookreadingapp.controller;
 
 import jakarta.validation.Valid;
-import org.example.bookreadingapp.dto.LoginRequest;
-import org.example.bookreadingapp.dto.RegisterRequest;
-import org.example.bookreadingapp.dto.TokenResponse;
-import org.example.bookreadingapp.dto.UserDto;
+import org.example.bookreadingapp.dto.auth.LoginRequest;
+import org.example.bookreadingapp.dto.auth.RegisterRequest;
+import org.example.bookreadingapp.dto.auth.TokenResponse;
+import org.example.bookreadingapp.dto.auth.UserDto;
 import org.example.bookreadingapp.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

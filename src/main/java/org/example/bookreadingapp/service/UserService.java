@@ -1,12 +1,11 @@
 package org.example.bookreadingapp.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.bookreadingapp.dto.UserDto;
+import org.example.bookreadingapp.dto.auth.UserDto;
 import org.example.bookreadingapp.entity.User;
 import org.example.bookreadingapp.repository.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.Optional;
 
