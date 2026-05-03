@@ -23,4 +23,8 @@ public class Author {
 
     @Column(unique = true)
     private String olKey;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_detail_id")
+    private AuthorDetail authorDetail;
 }

@@ -10,7 +10,7 @@ public class OpenLibraryAuthorDTO {
     @JsonProperty("name")
     private String name;
 
-    @JsonProperty("birth_day")
+    @JsonProperty("birth_date")
     private String birthDay;
 
     @JsonProperty("key")
