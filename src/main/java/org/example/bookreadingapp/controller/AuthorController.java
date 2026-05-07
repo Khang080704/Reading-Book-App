@@ -1,9 +1,9 @@
 package org.example.bookreadingapp.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.bookreadingapp.dto.AuthorDTO;
-import org.example.bookreadingapp.dto.AuthorDetailDTO;
-import org.example.bookreadingapp.entity.Author;
+import org.example.bookreadingapp.dto.author.AuthorDTO;
+import org.example.bookreadingapp.dto.author.AuthorDetailDTO;
+import org.example.bookreadingapp.dto.book.WorkDTO;
 import org.example.bookreadingapp.service.AuthorService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -43,5 +43,19 @@ public class AuthorController {
     public ResponseEntity<AuthorDetailDTO> getAuthorDetail(@PathVariable String olkey) {
         AuthorDetailDTO authorDetail = authorService.getAuthorDetail(olkey);
         return ResponseEntity.ok(authorDetail);
+    }
+
+    /**
+     * Get all works by an author
+     * Works are retrieved from Open Library Author Works API
+     * https://openlibrary.org/dev/docs/api/authors (Works by an Author section)
+     *
+     * @param authorKey OpenLibrary author key (e.g., OL34221A)
+     * @return list of works by the author
+     */
+    @GetMapping("/{authorKey}/works")
+    public ResponseEntity<List<WorkDTO>> getAuthorWorks(@PathVariable String authorKey) {
+        List<WorkDTO> works = authorService.getAuthorWorks(authorKey);
+        return ResponseEntity.ok(works);
     }
 }

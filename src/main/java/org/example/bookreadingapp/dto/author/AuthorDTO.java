@@ -1,4 +1,4 @@
-package org.example.bookreadingapp.dto;
+package org.example.bookreadingapp.dto.author;
 
 import lombok.Data;
 
@@ -9,4 +9,5 @@ public class AuthorDTO {
     private String birthDay;
     private int readCount;
     private String olKey;
+    private String avatar;
 }
