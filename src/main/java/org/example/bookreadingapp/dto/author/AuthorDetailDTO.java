@@ -1,6 +1,5 @@
-package org.example.bookreadingapp.dto;
+package org.example.bookreadingapp.dto.author;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.time.LocalDateTime;

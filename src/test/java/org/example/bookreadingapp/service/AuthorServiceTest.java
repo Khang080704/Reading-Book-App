@@ -1,7 +1,7 @@
 package org.example.bookreadingapp.service;
 
 import org.example.bookreadingapp.client.AuthorApiClient;
-import org.example.bookreadingapp.dto.AuthorDTO;
+import org.example.bookreadingapp.dto.author.AuthorDTO;
 import org.example.bookreadingapp.entity.Author;
 import org.example.bookreadingapp.repository.AuthorRepository;
 import org.junit.jupiter.api.Test;
