@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @Builder
+@Deprecated
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -38,5 +39,5 @@ public class Book {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
-    private Author author;
+    private AuthorDetail authorDetail;
 }

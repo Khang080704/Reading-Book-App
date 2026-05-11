@@ -1,6 +1,9 @@
 package org.example.bookreadingapp.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.bookreadingapp.dto.book.BookDetailDTO;
+import org.example.bookreadingapp.dto.book.EditionDTO;
+import org.example.bookreadingapp.dto.book.EditionsListDTO;
 import org.example.bookreadingapp.dto.book.SearchBookDTO;
 import org.example.bookreadingapp.service.SearchService;
 import org.springframework.http.ResponseEntity;
@@ -36,5 +39,20 @@ public class BookController {
             @RequestParam(defaultValue = "10") int limit) {
         List<SearchBookDTO> results = searchService.searchBooks(q, page, limit);
         return ResponseEntity.ok(results);
+    }
+
+    @GetMapping("/works/{workKey}")
+    public ResponseEntity<BookDetailDTO> getWorkDetails(@PathVariable String workKey) {
+        return ResponseEntity.ok(searchService.getWorkDetails(workKey));
+    }
+
+    @GetMapping("/works/{workKey}/editions")
+    public ResponseEntity<EditionsListDTO> getWorkEditions(@PathVariable String workKey) {
+        return ResponseEntity.ok(searchService.getWorkEditions(workKey));
+    }
+
+    @GetMapping("/editions/{editionKey}")
+    public ResponseEntity<EditionDTO> getEditionDetails(@PathVariable String editionKey) {
+        return ResponseEntity.ok(searchService.getEditionDetails(editionKey));
     }
 }

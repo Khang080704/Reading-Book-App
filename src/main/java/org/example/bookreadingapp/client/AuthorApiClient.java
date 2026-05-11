@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "authorApiClient", url = "https://openlibrary.org")
 public interface AuthorApiClient {
     @GetMapping("/search/authors.json")
-    AuthorListResponse getAuthors(@RequestParam String q);
+    AuthorListResponse getAuthors(@RequestParam String q,
+                                  @RequestParam(defaultValue = "20") int limit);
 
     @GetMapping("/authors/{olkey}.json")
     AuthorDetailResponse getAuthorDetail(@PathVariable String olkey);

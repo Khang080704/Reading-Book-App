@@ -13,5 +13,34 @@ services:
       POSTGRES_DB: store
     volumes:
       - postgres-data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: book-store-redis
+    ports:
+      - "6379:6379"
+    environment:
+      REDIS_PASSWORD: 123456
+      REDIS_HOST: localhost
+    volumes:
+      - redis_data:/data
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - ./.env
+    environment:
+      POSTGRES_URL: jdbc:postgresql://postgres:5432/store
+      REDIS_HOST: redis
+    container_name: book-store-backend
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+      - redis
+
 volumes:
   postgres-data:
+  redis_data:

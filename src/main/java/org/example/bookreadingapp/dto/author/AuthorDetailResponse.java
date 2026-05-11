@@ -9,7 +9,7 @@ import tools.jackson.databind.JsonNode;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AuthorDetailResponse {
-    @JsonProperty("birth_day")
+    @JsonProperty("birth_date")
     private String birthDate;
 
     @JsonProperty("name")
@@ -18,6 +18,9 @@ public class AuthorDetailResponse {
     private String bio;
     private String createdAt;
     private String lastModifiedAt;
+
+    @JsonProperty("key")
+    private String key;
 
     @JsonProperty("bio")
     public void unpackBio(JsonNode node) {

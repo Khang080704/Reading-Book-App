@@ -1,8 +1,12 @@
 package org.example.bookreadingapp.client;
 
+import org.example.bookreadingapp.dto.book.OpenLibraryEditionDTO;
+import org.example.bookreadingapp.dto.book.OpenLibraryEditionsDTO;
+import org.example.bookreadingapp.dto.book.OpenLibraryWorkDTO;
 import org.example.bookreadingapp.dto.book.SearchBooksDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -26,4 +30,14 @@ public interface BookApiClient {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int limit
     );
+
+    @GetMapping("/works/{workId}.json")
+    OpenLibraryWorkDTO getWorkDetail(@PathVariable String workId);
+
+    @GetMapping("/works/{workId}/editions.json")
+    OpenLibraryEditionsDTO getWorkEditions(@PathVariable String workId);
+
+    @GetMapping("/books/{editionId}.json")
+    OpenLibraryEditionDTO getEditionDetail(@PathVariable String editionId);
+
 }
