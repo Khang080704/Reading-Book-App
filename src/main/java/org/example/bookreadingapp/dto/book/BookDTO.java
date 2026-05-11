@@ -21,4 +21,5 @@ public class BookDTO {
     private String isbn;
     private Integer editionCount;
     private Integer firstPublishYear;
+    private String description;
 }

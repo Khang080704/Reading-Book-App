@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
+@Deprecated
 public interface BookRepository extends JpaRepository<Book, String> {
     /**
      * Find book by book key from Open Library

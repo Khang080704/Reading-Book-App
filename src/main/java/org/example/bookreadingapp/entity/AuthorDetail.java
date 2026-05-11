@@ -1,25 +1,24 @@
 package org.example.bookreadingapp.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Data
+@Table(name = "author_details")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class AuthorDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String Id;
-
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "authorDetail")
-    private Author author;
+    private String id;
+    private String olKey;
 
     private String birthDay;
     private String website;
@@ -30,6 +29,7 @@ public class AuthorDetail {
     private LocalDateTime createdAt;
     private LocalDateTime lastModify;
 
-
-
+    @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY)
+    @Builder.Default
+    private Set<Work> works = new HashSet<>();
 }

@@ -5,11 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SearchBookDTO {
+public class SearchBookDTO implements Serializable {
     private String bookKey;
     private String title;
     private String[] authorNames;

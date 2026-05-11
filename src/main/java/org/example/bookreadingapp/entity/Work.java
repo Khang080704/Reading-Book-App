@@ -6,7 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "works")
@@ -30,10 +33,27 @@ public class Work {
 
     private String coverId;
 
-    @Column(columnDefinition = "TEXT")
-    private String authorKeys; // Stored as JSON string or comma-separated
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "work_authors",
+            joinColumns = @JoinColumn(name = "work_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
+    @Builder.Default
+    private Set<AuthorDetail> authors = new HashSet<>();
 
-    @OneToMany(mappedBy = "work", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Edition> editions;
+    @OneToMany(mappedBy = "work", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @Builder.Default
+    private List<Edition> editions = new ArrayList<>();
+
+    public void addEdition(Edition edition) {
+        editions.add(edition);
+        edition.setWork(this);
+    }
+
+    public void removeEdition(Edition edition) {
+        editions.remove(edition);
+        edition.setWork(null);
+    }
 }
 

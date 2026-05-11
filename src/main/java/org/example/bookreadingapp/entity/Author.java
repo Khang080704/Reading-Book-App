@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Deprecated
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -26,10 +27,4 @@ public class Author {
     @Column(unique = true)
     private String olKey;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_detail_id")
-    private AuthorDetail authorDetail;
-
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Book> books;
 }

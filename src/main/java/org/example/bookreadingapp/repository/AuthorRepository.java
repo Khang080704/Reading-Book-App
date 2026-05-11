@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Deprecated
 public interface AuthorRepository extends JpaRepository<Author,String> {
     List<Author> findByNameContainingIgnoreCase(String authorName);
 

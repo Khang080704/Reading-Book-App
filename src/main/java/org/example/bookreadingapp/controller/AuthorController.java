@@ -19,23 +19,14 @@ public class AuthorController {
     private final AuthorService authorService;
 
     @GetMapping("/search")
-    public ResponseEntity<List<AuthorDTO>> searchAuthors(@RequestParam(defaultValue = "") String q){
-        List<AuthorDTO> authors = authorService.searchAuthors(q);
-        return ResponseEntity.ok(authors);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<AuthorDTO>> getAuthors(
+    public ResponseEntity<List<AuthorDTO>> searchAuthors(
+            @RequestParam(defaultValue = "") String q,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size,
+            @RequestParam(defaultValue = "20") int limit,
             @RequestParam(defaultValue = "name") String sortBy,
-            @RequestParam(defaultValue = "desc") String direction){
-        Sort sort = direction.equalsIgnoreCase("asc")
-                ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
-
-        PageRequest pageRequest = PageRequest.of(page, size, sort);
-        List<AuthorDTO> authors = authorService.getAuthors(pageRequest);
+            @RequestParam(defaultValue = "desc") String direction
+    ){
+        List<AuthorDTO> authors = authorService.searchAuthors(q, limit);
         return ResponseEntity.ok(authors);
     }
 

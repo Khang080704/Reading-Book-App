@@ -23,6 +23,9 @@ public class OpenLibraryEditionsDTO {
         @JsonProperty("key")
         private String key;
 
+        @JsonProperty("title")
+        private String title;
+
         @JsonProperty("isbn_13")
         private List<String> isbn13;
 
