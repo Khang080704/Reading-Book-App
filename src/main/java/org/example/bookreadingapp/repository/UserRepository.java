@@ -1,6 +1,7 @@
 package org.example.bookreadingapp.repository;
 
 import org.example.bookreadingapp.entity.User;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +12,10 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByEmail(String email);
     Optional<User> findById(String id);
+
+    @EntityGraph(attributePaths = "favoriteAuthors")
+    Optional<User> findWithFavoriteAuthorsById(String userId);
+
+    @EntityGraph(attributePaths = "favoriteWorks")
+    Optional<User> findWithFavoriteWorksById(String userId);
 }

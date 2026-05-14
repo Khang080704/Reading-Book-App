@@ -48,7 +48,7 @@ public class SearchBooksDTO {
         private String coverEditionKey;
 
         public String getCoverUrl() {
-            return coverId != null ? "https://covers.openlibrary.org/a/olid/" + coverId + "-M.jpg" : null;
+            return coverId != null ? "https://covers.openlibrary.org/b/id/" + coverId + "-M.jpg" : null;
         }
 
         public String getFirstIsbn() {
