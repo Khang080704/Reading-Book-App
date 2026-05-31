@@ -53,7 +53,6 @@ public class UserServiceTest {
 
         UserDto result = userService.getCurrentUser();
 
-        assertNotNull(result);
         assertEquals("email@gmail.com", result.getEmail());
         assertEquals("Nguyen Van A", result.getUserName());
 
