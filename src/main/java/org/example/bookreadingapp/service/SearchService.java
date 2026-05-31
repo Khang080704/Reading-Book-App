@@ -93,7 +93,6 @@ public class SearchService {
 
         return docs.stream()
                 .map(entry -> {
-                    String id = entry.getKey().substring(entry.getKey().lastIndexOf("/") + 1);
                     return SearchBookDTO.builder()
                             .bookKey(entry.getKey())
                             .title(entry.getTitle())
@@ -103,7 +102,7 @@ public class SearchService {
                             .firstPublishYear(entry.getFirstPublishYear())
                             .isbn(entry.getFirstIsbn())
                             .editionCount(entry.getEditionCount())
-                            .coverUrl("https://covers.openlibrary.org/b/id/" + id + "-M.jpg")
+                            .coverUrl(entry.getCoverUrl())
                             .build();
                 })
                 .collect(Collectors.toList());
