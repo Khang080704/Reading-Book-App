@@ -78,10 +78,12 @@ jobs:
           docker build -t ${{ secrets.ACR_LOGIN_SERVER }}/my-app:latest .
           # Push lên ACR
           docker push ${{ secrets.ACR_LOGIN_SERVER }}/my-app:latest
+      
+        
 
-      - name: Trigger Azure Web App Restart
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: 'tên-web-app-của-bạn'
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          images: ${{ secrets.ACR_LOGIN_SERVER }}/my-app:latest
+#      - name: Trigger Azure Web App Restart
+#        uses: azure/webapps-deploy@v2
+#        with:
+#          app-name: 'tên-web-app-của-bạn'
+#          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+#          images: ${{ secrets.ACR_LOGIN_SERVER }}/my-app:latest
