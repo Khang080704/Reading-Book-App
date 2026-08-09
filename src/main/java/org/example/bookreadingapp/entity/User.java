@@ -29,6 +29,9 @@ public class User {
     private String name;
     private String password;
 
+    @Column(unique = true, name = "keycloak_id")
+    private String keycloakId;
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(
             name = "user_favorite_works",

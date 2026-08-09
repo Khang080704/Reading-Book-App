@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.bookreadingapp.dto.auth.UserDto;
 import org.example.bookreadingapp.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,8 +17,8 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<UserDto> getCurrentUser() {
-        UserDto result = userService.getCurrentUser();
+    public ResponseEntity<UserDto> getCurrentUser(@AuthenticationPrincipal Jwt jwt) {
+        UserDto result = userService.getCurrentUser(jwt);
         return ResponseEntity.ok(result);
     }
 
