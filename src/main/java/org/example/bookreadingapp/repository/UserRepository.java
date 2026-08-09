@@ -12,6 +12,7 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByEmail(String email);
     Optional<User> findById(String id);
+    Optional<User> findByKeycloakId(String keycloakId);
 
     @EntityGraph(attributePaths = "favoriteAuthors")
     Optional<User> findWithFavoriteAuthorsById(String userId);

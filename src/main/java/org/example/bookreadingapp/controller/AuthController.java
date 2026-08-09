@@ -14,25 +14,23 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
-    private final AuthService authService;
-
-    @Autowired
-    public AuthController(AuthService authService) {
-        this.authService = authService;
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<UserDto> registerUser(@Valid @RequestBody RegisterRequest request) {
-        UserDto userDto1 = authService.register(request.getEmail(), request.getPassword(), request.getUsername());
-        return ResponseEntity.status(HttpStatus.CREATED).body(userDto1);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest request) {
-        TokenResponse result = authService.login(request.getEmail(), request.getPassword());
-        return ResponseEntity.ok(result);
-    }
-
-
+//    private final AuthService authService;
+//
+//    @Autowired
+//    public AuthController(AuthService authService) {
+//        this.authService = authService;
+//    }
+//
+//    @PostMapping("/register")
+//    public ResponseEntity<UserDto> registerUser(@Valid @RequestBody RegisterRequest request) {
+//        UserDto userDto1 = authService.register(request.getEmail(), request.getPassword(), request.getUsername());
+//        return ResponseEntity.status(HttpStatus.CREATED).body(userDto1);
+//    }
+//
+//    @PostMapping("/login")
+//    public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequest request) {
+//        TokenResponse result = authService.login(request.getEmail(), request.getPassword());
+//        return ResponseEntity.ok(result);
+//    }
 
 }
