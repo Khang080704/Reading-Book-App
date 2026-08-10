@@ -30,6 +30,7 @@ public class UserSeed implements CommandLineRunner {
         User user = new User();
         user.setName("Nguyen Van A");
         user.setEmail("example@gmail.com");
+        user.setKeycloakId("id123");
         user.setPassword(passwordEncoder.encode("123456"));
 
         userRepository.save(user);

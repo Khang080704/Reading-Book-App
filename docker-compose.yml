@@ -23,6 +23,7 @@ services:
     environment:
       REDIS_PASSWORD: 123456
       REDIS_HOST: localhost
+    command: redis-server --requirepass 123456
     volumes:
       - redis_data:/data
 
@@ -52,6 +53,8 @@ services:
     environment:
       POSTGRES_URL: jdbc:postgresql://postgres:5432/store
       REDIS_HOST: redis
+      KEYCLOAK_ISSUER_URI: http://localhost:8080/realms/book-store-auth
+      KEYCLOAK_JWK_SET_URI: http://keycloak:8080/realms/book-store-auth/protocol/openid-connect/certs
     container_name: book-store-backend
     ports:
       - "8081:8081"
