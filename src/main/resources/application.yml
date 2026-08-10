@@ -1,12 +1,14 @@
 server:
   port: 8081
+  max-http-request-header-size: 16384
 
 spring:
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:9000/realms/book-store-auth
+          issuer-uri: ${KEYCLOAK_ISSUER_URI}
+          jwk-set-uri: ${KEYCLOAK_JWK_SET_URI}
   datasource:
     driver-class-name: org.postgresql.Driver
     url: ${POSTGRES_URL}
@@ -23,7 +25,7 @@ spring:
       port: ${REDIS_PORT}
       password: ${REDIS_PASSWORD}
       ssl:
-        enabled: true
+        enabled: false
   cache:
     type: redis
     time-to-live: 600000

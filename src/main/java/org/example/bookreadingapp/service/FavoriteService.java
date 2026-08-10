@@ -127,4 +127,24 @@ public class FavoriteService {
                         .avatar("https://covers.openlibrary.org/a/olid/" + a.getOlKey() + "-M.jpg")
                         .build()).toList();
     }
+
+    @Transactional(readOnly = true)
+    public boolean isWorkFavorite(String userId, String workKey) {
+        Optional<User> userOpt = userRepository.findWithFavoriteWorksById(userId);
+        if (userOpt.isEmpty()) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return userOpt.get().getFavoriteWorks()
+                .stream().anyMatch(w -> w.getWorkKey().equals(workKey));
+    }
+
+    @Transactional(readOnly = true)
+    public boolean isAuthorFavorite(String userId, String authorKey) {
+        Optional<User> userOpt = userRepository.findWithFavoriteAuthorsById(userId);
+        if (userOpt.isEmpty()) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return userOpt.get().getFavoriteAuthors()
+                .stream().anyMatch(a -> a.getOlKey().equals(authorKey));
+    }
 }

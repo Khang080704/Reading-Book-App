@@ -23,6 +23,7 @@ services:
     environment:
       REDIS_PASSWORD: 123456
       REDIS_HOST: localhost
+    command: redis-server --requirepass 123456
     volumes:
       - redis_data:/data
 
