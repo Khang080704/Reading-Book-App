@@ -53,7 +53,7 @@ services:
     environment:
       POSTGRES_URL: jdbc:postgresql://postgres:5432/store
       REDIS_HOST: redis
-      KEYCLOAK_ISSUER_URI: http://localhost:8080/realms/book-store-auth
+      KEYCLOAK_ISSUER_URI: http://localhost:9000/realms/book-store-auth
       KEYCLOAK_JWK_SET_URI: http://keycloak:8080/realms/book-store-auth/protocol/openid-connect/certs
     container_name: book-store-backend
     ports:

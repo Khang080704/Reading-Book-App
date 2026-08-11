@@ -29,4 +29,8 @@ spring:
   cache:
     type: redis
     time-to-live: 600000
+  cloud:
+    openfeign:
+      httpclient:
+        connection-timeout: 5000
 

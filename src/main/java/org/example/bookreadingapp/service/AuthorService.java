@@ -69,8 +69,9 @@ public class AuthorService {
                     .createdAt(LocalDateTime.parse(response.getCreatedAt()))
                     .lastModify(LocalDateTime.parse(response.getLastModifiedAt()))
                     .build();
+            log.info("Saving author information: {}", detail.toString());
 
-            authorHelper.saveAuthorDetail(detail);
+            authorDetailRepository.save(detail);
 
             return AuthorDetailDTO.builder()
                     .birthDate(detail.getBirthDay())

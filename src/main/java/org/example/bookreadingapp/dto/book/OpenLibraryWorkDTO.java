@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
@@ -12,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Slf4j
 public class OpenLibraryWorkDTO {
     @JsonProperty("key")
     private String key;
@@ -47,7 +51,13 @@ public class OpenLibraryWorkDTO {
         if (description instanceof String) {
             return (String) description;
         } else if (description != null) {
-            return description.toString();
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode jsonNode = mapper.valueToTree(description);
+                return jsonNode.get("value").asText();
+            } catch (Exception e) {
+                log.error("Error parsing description: {}", e.getMessage());
+            }
         }
         return null;
     }
