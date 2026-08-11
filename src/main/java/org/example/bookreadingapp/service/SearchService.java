@@ -40,7 +40,7 @@ public class SearchService {
     private final EditionRepository editionRepository;
     private final AuthorDetailRepository authorDetailRepository;
 
-    @Cacheable(value = "bookSearch", key = "#query + '-' + #page + '-' + #limit")
+    @Cacheable(value = "bookSearch", key = "#query + '-' + #page + '-' + #limit", sync = true)
     public List<SearchBookDTO> searchBooks(String query, int page, int limit) {
         log.info("Cache miss! call open library api");
         SearchBooksDTO data = bookApiClient.searchBooks(query, page, limit);
@@ -129,6 +129,14 @@ public class SearchService {
         } catch (FeignException.NotFound ex) {
             throw new BookNotFound("Work with key " + canonicalWorkKey + " not found.", ex);
         } catch (FeignException ex) {
+            log.error(
+                    "OpenLibrary request failed. key={}, status={}, message={}, cause={}",
+                    canonicalWorkKey,
+                    ex.status(),
+                    ex.getMessage(),
+                    ex.getCause() != null ? ex.getCause().toString() : null,
+                    ex
+            );
             throw new BookApiException("Failed to fetch work details: " + ex.contentUTF8(), ex.status(), ex);
         }
     }

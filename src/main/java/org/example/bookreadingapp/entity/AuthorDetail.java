@@ -18,6 +18,8 @@ public class AuthorDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
+    @Column(unique = true)
     private String olKey;
 
     private String birthDay;
