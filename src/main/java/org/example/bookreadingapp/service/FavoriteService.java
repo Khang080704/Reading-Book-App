@@ -105,7 +105,7 @@ public class FavoriteService {
                 .stream().map(w -> WorkDTO.builder()
                         .workKey(w.getWorkKey())
                         .title(w.getTitle())
-                        .coverUrl(w.getCoverId())
+                        .coverUrl("https://covers.openlibrary.org/b/id/" + w.getCoverId() + "-M.jpg")
                         .description(w.getDescription())
                         .build()).toList();
     }

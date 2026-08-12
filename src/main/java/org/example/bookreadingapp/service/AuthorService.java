@@ -50,13 +50,16 @@ public class AuthorService {
 
         if(author.isPresent()) {
             AuthorDetail authorDetail = author.get();
-            AuthorDetailDTO dto = new AuthorDetailDTO();
-            dto.setBio(authorDetail.getBio());
-            dto.setBirthDate(authorDetail.getBirthDay());
-            dto.setFullName(authorDetail.getFullName());
-            dto.setCreatedAt(authorDetail.getCreatedAt());
-            dto.setLastModifiedAt(authorDetail.getLastModify());
-            return dto;
+
+            return AuthorDetailDTO.builder()
+                    .bio(authorDetail.getBio())
+                    .birthDate(authorDetail.getBirthDay())
+                    .fullName(authorDetail.getFullName())
+                    .createdAt(authorDetail.getCreatedAt())
+                    .lastModifiedAt(authorDetail.getLastModify())
+                    .avatar("https://covers.openlibrary.org/a/olid/" + olKey + "-M.jpg")
+                    .build();
+
         }
         else {
             log.info("Author detail not found in database forolKey: {}", olKey);
@@ -65,7 +68,7 @@ public class AuthorService {
                     .bio(response.getBio())
                     .birthDay(response.getBirthDate())
                     .fullName(response.getFullName())
-                    .olKey(response.getKey())
+                    .olKey(normalizeAuthorKey(response.getKey()))
                     .createdAt(LocalDateTime.parse(response.getCreatedAt()))
                     .lastModify(LocalDateTime.parse(response.getLastModifiedAt()))
                     .build();
