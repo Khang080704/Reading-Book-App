@@ -65,7 +65,7 @@ public class AuthorService {
                     .bio(response.getBio())
                     .birthDay(response.getBirthDate())
                     .fullName(response.getFullName())
-                    .olKey(response.getKey())
+                    .olKey(normalizeAuthorKey(response.getKey()))
                     .createdAt(LocalDateTime.parse(response.getCreatedAt()))
                     .lastModify(LocalDateTime.parse(response.getLastModifiedAt()))
                     .build();

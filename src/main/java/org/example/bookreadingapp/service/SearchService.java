@@ -50,9 +50,9 @@ public class SearchService {
     public BookDetailDTO getWorkDetails(String workKey) {
         String canonicalWorkKey = canonicalWorkKey(workKey);
 
-        return workRepository.findByWorkKey(canonicalWorkKey)
+        return workRepository.findByWorkKey(workKey)
                 .map(this::mapWorkToDetailDTO)
-                .orElseGet(() -> mapWorkToDetailDTO(persistWorkFromApi(canonicalWorkKey)));
+                .orElseGet(() -> mapWorkToDetailDTO(persistWorkFromApi(workKey)));
     }
 
     public EditionsListDTO getWorkEditions(String workKey) {
@@ -66,10 +66,10 @@ public class SearchService {
                     .build();
         }
 
-        Work work = workRepository.findByWorkKey(canonicalWorkKey)
-                .orElseGet(() -> persistWorkFromApi(canonicalWorkKey));
+        Work work = workRepository.findByWorkKey(workKey)
+                .orElseGet(() -> persistWorkFromApi(workKey));
 
-        OpenLibraryEditionsDTO response = fetchWorkEditions(canonicalWorkKey);
+        OpenLibraryEditionsDTO response = fetchWorkEditions(workKey);
         List<EditionDTO> editions = persistWorkEditions(work, response != null ? response.getEntries() : null);
 
         return EditionsListDTO.builder()
@@ -157,7 +157,7 @@ public class SearchService {
         }
 
         Work work = Work.builder()
-                .workKey(canonicalWorkKey(response.getKey()))
+                .workKey(toApiId(response.getKey()))
                 .title(response.getTitle())
                 .description(response.getDescription())
                 .coverId(response.getCoverId())
@@ -295,7 +295,8 @@ public class SearchService {
 
     private String canonicalEditionKey(String editionKey) {
         String apiId = toApiId(editionKey);
-        return apiId == null || apiId.isBlank() ? null : "/editions/" + apiId;
+        // return apiId == null || apiId.isBlank() ? null : "/editions/" + apiId;
+        return apiId;
     }
 
     private String canonicalAuthorKey(String authorKey) {

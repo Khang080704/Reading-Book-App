@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Deprecated
 public class BookDTO {
     private String id;
     private String bookKey;
