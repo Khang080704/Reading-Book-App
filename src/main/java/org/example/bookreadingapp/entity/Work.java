@@ -46,6 +46,9 @@ public class Work {
     @Builder.Default
     private List<Edition> editions = new ArrayList<>();
 
+    @OneToMany(mappedBy = "work", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<ReadingResource> readingResources;
+
     public void addEdition(Edition edition) {
         editions.add(edition);
         edition.setWork(this);
