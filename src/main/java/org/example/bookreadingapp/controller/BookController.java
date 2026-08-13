@@ -63,4 +63,9 @@ public class BookController {
     public ResponseEntity<ReadingResourceDto> getReadingResource(@PathVariable String workKey) {
         return ResponseEntity.ok(readingResourceService.isReading(workKey));
     }
+
+    @GetMapping
+    public ResponseEntity<List<SearchBookDTO>> getAvailableBooks() {
+        return ResponseEntity.ok(searchService.getAvailableBooks());
+    }
 }

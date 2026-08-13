@@ -19,9 +19,6 @@ public class ReadingResource {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Column(name = "is_preffered")
-    private boolean isPreferred = false;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "work_key")
     private Work work;

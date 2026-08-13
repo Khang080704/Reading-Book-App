@@ -47,6 +47,20 @@ public class SearchService {
         return mapEntriesToSearchDTO(data != null ? data.getDocs() : null);
     }
 
+    public List<SearchBookDTO> getAvailableBooks() {
+        return workRepository.findAll().stream()
+                .map(work -> SearchBookDTO.builder()
+                        .authorNames(work.getAuthors().stream()
+                                .map(AuthorDetail::getFullName)
+                                .toArray(String[]::new))
+                        .bookKey(work.getWorkKey())
+                        .title(work.getTitle())
+                        .coverUrl(work.getCoverId() != null ? "https://covers.openlibrary.org/b/id/" + work.getCoverId() + "-M.jpg" : null)
+                        .build())
+                .collect(Collectors.toList());
+
+    }
+
     public BookDetailDTO getWorkDetails(String workKey) {
         String canonicalWorkKey = canonicalWorkKey(workKey);
 
