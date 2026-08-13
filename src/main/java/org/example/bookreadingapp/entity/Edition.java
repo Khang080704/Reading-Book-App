@@ -3,6 +3,8 @@ package org.example.bookreadingapp.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "editions")
 @NoArgsConstructor

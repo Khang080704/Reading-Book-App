@@ -5,6 +5,8 @@ import org.example.bookreadingapp.dto.book.BookDetailDTO;
 import org.example.bookreadingapp.dto.book.EditionDTO;
 import org.example.bookreadingapp.dto.book.EditionsListDTO;
 import org.example.bookreadingapp.dto.book.SearchBookDTO;
+import org.example.bookreadingapp.dto.reading.ReadingResourceDto;
+import org.example.bookreadingapp.service.ReadingResourceService;
 import org.example.bookreadingapp.service.SearchService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,7 @@ import java.util.List;
 @RequestMapping("/api/v1/books")
 public class BookController {
     private final SearchService searchService;
+    private final ReadingResourceService readingResourceService;
 
     /**
      * Search books by title, author, or other criteria
@@ -54,5 +57,15 @@ public class BookController {
     @GetMapping("/editions/{editionKey}")
     public ResponseEntity<EditionDTO> getEditionDetails(@PathVariable String editionKey) {
         return ResponseEntity.ok(searchService.getEditionDetails(editionKey));
+    }
+
+    @GetMapping("works/{workKey}/reading-resource")
+    public ResponseEntity<ReadingResourceDto> getReadingResource(@PathVariable String workKey) {
+        return ResponseEntity.ok(readingResourceService.isReading(workKey));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<SearchBookDTO>> getAvailableBooks() {
+        return ResponseEntity.ok(searchService.getAvailableBooks());
     }
 }
