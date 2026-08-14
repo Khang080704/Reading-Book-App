@@ -1,6 +1,7 @@
 package org.example.bookreadingapp.service;
 
 import feign.FeignException;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.bookreadingapp.client.BookApiClient;
@@ -20,6 +21,8 @@ import org.example.bookreadingapp.exception.definitions.BookNotFound;
 import org.example.bookreadingapp.repository.AuthorDetailRepository;
 import org.example.bookreadingapp.repository.EditionRepository;
 import org.example.bookreadingapp.repository.WorkRepository;
+import org.example.bookreadingapp.service.provider.DatabaseProvider;
+import org.example.bookreadingapp.service.provider.SearchProvider;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -39,12 +42,26 @@ public class SearchService {
     private final WorkRepository workRepository;
     private final EditionRepository editionRepository;
     private final AuthorDetailRepository authorDetailRepository;
+    private final Map<String, SearchProvider> searchProviders;
+
 
     @Cacheable(value = "bookSearch", key = "#query + '-' + #page + '-' + #limit", sync = true)
     public List<SearchBookDTO> searchBooks(String query, int page, int limit) {
         log.info("Cache miss! call open library api");
-        SearchBooksDTO data = bookApiClient.searchBooks(query, page, limit);
-        return mapEntriesToSearchDTO(data != null ? data.getDocs() : null);
+        log.info("Key set in search provider: {}", searchProviders.keySet());
+        SearchProvider<?> searchProvider = searchProviders.get("openlibrary");
+        try {
+            List<SearchBookDTO> data = searchProvider.search(query, page, limit);
+            log.info("Call Open Library successfully");
+            return data;
+        }
+        catch (FeignException ex) {
+            log.error("Error occurred while searching for books with Open Library: {}. Fallback to database", ex.getMessage(), ex);
+            searchProvider = searchProviders.get("database");
+            List<SearchBookDTO> data = searchProvider.search(query, page, limit);
+            return data;
+        }
+
     }
 
     public List<SearchBookDTO> getAvailableBooks() {
