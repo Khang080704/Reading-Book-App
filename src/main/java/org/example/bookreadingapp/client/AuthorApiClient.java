@@ -26,5 +26,7 @@ public interface AuthorApiClient {
      * @return works list by the author
      */
     @GetMapping("/authors/{authorKey}/works.json")
-    AuthorWorksDTO getAuthorWorks(@PathVariable String authorKey);
+    AuthorWorksDTO getAuthorWorks(@PathVariable String authorKey,
+                                  @RequestParam(defaultValue = "0") int offset,
+                                  @RequestParam(defaultValue = "20") int limit);
 }

@@ -6,14 +6,24 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.bookreadingapp.client.AuthorApiClient;
 import org.example.bookreadingapp.dto.author.*;
 import org.example.bookreadingapp.dto.book.AuthorWorksDTO;
+import org.example.bookreadingapp.dto.book.ProviderWorkPage;
 import org.example.bookreadingapp.dto.book.WorkDTO;
 import org.example.bookreadingapp.entity.AuthorDetail;
+import org.example.bookreadingapp.entity.AuthorWorkSync;
+import org.example.bookreadingapp.entity.Work;
 import org.example.bookreadingapp.exception.definitions.AuthorNotExists;
 import org.example.bookreadingapp.helper.AuthorHelper;
 import org.example.bookreadingapp.repository.AuthorDetailRepository;
+import org.example.bookreadingapp.repository.AuthorWorkSyncRepository;
+import org.example.bookreadingapp.repository.WorkRepository;
+import org.example.bookreadingapp.service.provider.SearchProvider;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -25,7 +35,9 @@ import java.util.stream.Collectors;
 public class AuthorService {
     private final AuthorApiClient authorApiClient;
     private final AuthorDetailRepository authorDetailRepository;
-    private final AuthorHelper authorHelper;
+    private final WorkRepository workRepository;
+    private final AuthorWorkSyncRepository syncRepository;
+    private final SearchProvider bookProvider;
 
     @Cacheable(value = "author", key = "#authorName + '-' + #limit")
     public List<AuthorDTO> searchAuthors(String authorName, int limit) {
@@ -124,6 +136,102 @@ public class AuthorService {
             log.error("Unexpected error fetching author works: {}", ex.getMessage());
             throw new AuthorNotExists("Unexpected error: " + ex.getMessage());
         }
+    }
+
+    @Transactional
+    public Page<Work> getWorksByAuthor(String authorKey, Pageable pageable) {
+        AuthorDetail author = authorDetailRepository
+                .findByOlKey(authorKey)
+                .orElseThrow(() ->
+                        new RuntimeException("Author not found")
+                );
+
+        Page<Work> localPage =
+                workRepository.findByAuthors_Id(
+                        authorKey,
+                        pageable
+                );
+
+        long requiredCount =
+                (long) (pageable.getPageNumber() + 1)
+                        * pageable.getPageSize();
+
+        long localCount =
+                workRepository.countByAuthors_Id(authorKey);
+
+        if (localCount >= requiredCount) {
+            return localPage;
+        }
+
+        AuthorWorkSync sync =
+                syncRepository
+                        .findByAuthorDetail_Id(authorKey)
+                        .orElseGet(() ->
+                                createInitialSync(author)
+                        );
+
+        if (!sync.isHasNext()) {
+            return localPage;
+        }
+
+        syncNextBatch(author, sync);
+
+        return workRepository.findByAuthors_Id(
+                authorKey,
+                pageable
+        );
+    }
+
+    private void syncNextBatch(
+            AuthorDetail author,
+            AuthorWorkSync sync
+    ) {
+
+        ProviderWorkPage response =
+                bookProvider.getWorksByAuthor(
+                        author,
+                        sync.getNextOffset(),
+                        sync.getBatchSize()
+                );
+
+        for (WorkDTO remote : response.works()) {
+
+            Work work = workRepository
+                    .findByWorkKey(remote.getWorkKey())
+                    .orElseGet(() ->
+                            Work.builder()
+                                    .workKey(remote.getWorkKey())
+                                    .title(remote.getTitle())
+                                    .description(remote.getDescription())
+                                    .coverId(remote.getCoverUrl())
+                                    .build()
+                    );
+
+            work.getAuthors().add(author);
+
+            workRepository.save(work);
+        }
+
+        sync.setNextOffset(
+                sync.getNextOffset()
+                        + response.works().size()
+        );
+
+        sync.setHasNext(response.hasNext());
+        sync.setLastSyncAt(Instant.now());
+
+        syncRepository.save(sync);
+    }
+
+    private AuthorWorkSync createInitialSync(
+            AuthorDetail author
+    ) {
+        return AuthorWorkSync.builder()
+                .authorDetail(author)
+                .nextOffset(0)
+                .batchSize(50)
+                .hasNext(true)
+                .build();
     }
 
     /**
