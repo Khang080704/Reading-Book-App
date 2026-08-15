@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface AuthorDetailRepository extends JpaRepository<AuthorDetail,String> {
     Optional<AuthorDetail> findByOlKey(String olKey);
+
+    boolean existsByOlKey(String olKey);
 }

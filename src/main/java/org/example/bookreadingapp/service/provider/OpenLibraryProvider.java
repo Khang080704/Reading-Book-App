@@ -3,10 +3,13 @@ package org.example.bookreadingapp.service.provider;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.bookreadingapp.client.AuthorApiClient;
 import org.example.bookreadingapp.client.BookApiClient;
-import org.example.bookreadingapp.dto.book.SearchBookDTO;
-import org.example.bookreadingapp.dto.book.SearchBooksDTO;
+import org.example.bookreadingapp.dto.book.*;
+import org.example.bookreadingapp.entity.AuthorDetail;
+import org.example.bookreadingapp.entity.Work;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 @Primary
 public class OpenLibraryProvider implements SearchProvider<SearchBooksDTO.BookSearchEntry> {
     private final BookApiClient bookApiClient;
+    private final AuthorApiClient authorApiClient;
 
     @Override
     public List<SearchBookDTO> search(String query, int page, int limit) {
@@ -53,5 +57,28 @@ public class OpenLibraryProvider implements SearchProvider<SearchBooksDTO.BookSe
                         .build())
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public ProviderWorkPage getWorksByAuthor(AuthorDetail authorDetail, int offset, int limit) {
+        AuthorWorksDTO data = authorApiClient.getAuthorWorks(authorDetail.getOlKey(), offset, limit);
+        List<WorkDTO> works = mapAuthorWorksToDto(data);
+
+        boolean hasNext = works.size() == limit;
+
+        return new ProviderWorkPage(works, hasNext, offset + works.size());
+    }
+
+    private List<WorkDTO> mapAuthorWorksToDto (AuthorWorksDTO authorWorksDTO) {
+        return authorWorksDTO.getEntries().stream()
+                .map(entry -> WorkDTO.builder()
+                        .workKey(entry.getKey())
+                        .title(entry.getTitle())
+                        .description(entry.getDescription())
+                        .coverUrl(entry.getCoverId() != null ?
+                                "https://covers.openlibrary.org/b/id/" + entry.getCoverId() + "-M.jpg"
+                                : null)
+                        .build())
+                .collect(Collectors.toList());
     }
 }

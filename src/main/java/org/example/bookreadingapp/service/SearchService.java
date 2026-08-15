@@ -117,28 +117,6 @@ public class SearchService {
                 .orElseGet(() -> mapEditionToDTO(persistEditionFromApi(canonicalEditionKey)));
     }
 
-    private List<SearchBookDTO> mapEntriesToSearchDTO(List<SearchBooksDTO.BookSearchEntry> docs) {
-        if (docs == null) {
-            return Collections.emptyList();
-        }
-
-        return docs.stream()
-                .map(entry -> {
-                    return SearchBookDTO.builder()
-                            .bookKey(entry.getKey())
-                            .title(entry.getTitle())
-                            .authorNames(entry.getAuthorNames() != null
-                                    ? entry.getAuthorNames().toArray(new String[0])
-                                    : new String[0])
-                            .firstPublishYear(entry.getFirstPublishYear())
-                            .isbn(entry.getFirstIsbn())
-                            .editionCount(entry.getEditionCount())
-                            .coverUrl(entry.getCoverUrl())
-                            .build();
-                })
-                .collect(Collectors.toList());
-    }
-
     private Work persistWorkFromApi(String canonicalWorkKey) {
         OpenLibraryWorkDTO response = fetchWorkDetail(canonicalWorkKey);
         return persistWork(response);

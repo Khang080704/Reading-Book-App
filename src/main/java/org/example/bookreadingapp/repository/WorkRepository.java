@@ -1,6 +1,8 @@
 package org.example.bookreadingapp.repository;
 
 import org.example.bookreadingapp.entity.Work;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Repository;
@@ -13,8 +15,14 @@ public interface WorkRepository extends JpaRepository<Work, String> {
     @EntityGraph(attributePaths = "authors")
     Optional<Work> findByWorkKey(String workKey);
 
+    boolean existsByWorkKey(String workKey);
+
     @Override
     @EntityGraph(attributePaths = "authors")
     List<Work> findAll();
+
+    Page<Work> findByAuthors_OlKey(String olKey, Pageable pageable);
+
+    long countByAuthors_OlKey(String authorId);
 }
 
