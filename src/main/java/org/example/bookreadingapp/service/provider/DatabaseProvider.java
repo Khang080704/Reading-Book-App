@@ -1,7 +1,9 @@
 package org.example.bookreadingapp.service.provider;
 
 import lombok.RequiredArgsConstructor;
+import org.example.bookreadingapp.dto.book.ProviderWorkPage;
 import org.example.bookreadingapp.dto.book.SearchBookDTO;
+import org.example.bookreadingapp.entity.AuthorDetail;
 import org.example.bookreadingapp.entity.Work;
 import org.example.bookreadingapp.repository.WorkRepository;
 import org.springframework.stereotype.Component;
@@ -35,6 +37,11 @@ public class DatabaseProvider implements SearchProvider<Work> {
                         .coverUrl(item.getCoverId() != null ? "https://covers.openlibrary.org/b/id/" + item.getCoverId() + "-M.jpg" : null)
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ProviderWorkPage getWorksByAuthor(AuthorDetail authorDetail, int page, int limit) {
+        return null;
     }
 
 

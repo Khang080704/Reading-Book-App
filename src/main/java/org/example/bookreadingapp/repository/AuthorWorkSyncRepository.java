@@ -9,10 +9,6 @@ import java.util.Optional;
 @Repository
 public interface AuthorWorkSyncRepository extends JpaRepository<AuthorWorkSync, String> {
 
-    Optional<AuthorWorkSync> findByAuthorDetail_Id(
-            String authorId
-    );
-
     Optional<AuthorWorkSync> findByAuthorDetail_OlKey(
             String olKey
     );

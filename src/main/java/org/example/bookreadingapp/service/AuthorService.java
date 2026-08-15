@@ -19,12 +19,14 @@ import org.example.bookreadingapp.repository.WorkRepository;
 import org.example.bookreadingapp.service.provider.SearchProvider;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -99,47 +101,8 @@ public class AuthorService {
         }
     }
 
-    /**
-     * Get works by author from Open Library
-     * Uses Author Works API: /authors/{authorKey}/works.json
-     * https://openlibrary.org/dev/docs/api/authors
-     */
-    @Cacheable(value = "authorWorks", key = "#authorKey")
-    public List<WorkDTO> getAuthorWorks(String authorKey) throws AuthorNotExists {
-        log.info("Fetching works for author: {}", authorKey);
-
-        // Normalize author key
-        String normalizedKey = normalizeAuthorKey(authorKey);
-
-        try {
-            AuthorWorksDTO worksResponse = authorApiClient.getAuthorWorks(normalizedKey);
-            log.info("Found {} works for author: {}", worksResponse.getEntries().size(), authorKey);
-
-            return worksResponse.getEntries().stream()
-                    .map(entry -> WorkDTO.builder()
-                            .workKey(entry.getKey())
-                            .title(entry.getTitle())
-                            .description(entry.getDescription())
-                            .coverUrl(entry.getCoverId() != null ?
-                                    "https://covers.openlibrary.org/b/id/" + entry.getCoverId() + "-M.jpg"
-                                    : null)
-                            .build())
-                    .collect(Collectors.toList());
-
-        } catch (FeignException.NotFound ex) {
-            log.error("Author not found: {}", authorKey);
-            throw new AuthorNotExists("Author with key " + authorKey + " not found." + ex.getMessage());
-        } catch (FeignException ex) {
-            log.error("Error fetching author works: {}", ex.getMessage());
-            throw new AuthorNotExists("Failed to fetch author works: " + ex.contentUTF8() );
-        } catch (Exception ex) {
-            log.error("Unexpected error fetching author works: {}", ex.getMessage());
-            throw new AuthorNotExists("Unexpected error: " + ex.getMessage());
-        }
-    }
-
     @Transactional
-    public Page<Work> getWorksByAuthor(String authorKey, Pageable pageable) {
+    public Page<WorkDTO> getWorksByAuthor(String authorKey, Pageable pageable) {
         AuthorDetail author = authorDetailRepository
                 .findByOlKey(authorKey)
                 .orElseThrow(() ->
@@ -147,7 +110,7 @@ public class AuthorService {
                 );
 
         Page<Work> localPage =
-                workRepository.findByAuthors_Id(
+                workRepository.findByAuthors_OlKey(
                         authorKey,
                         pageable
                 );
@@ -157,29 +120,31 @@ public class AuthorService {
                         * pageable.getPageSize();
 
         long localCount =
-                workRepository.countByAuthors_Id(authorKey);
+                workRepository.countByAuthors_OlKey(authorKey);
 
         if (localCount >= requiredCount) {
-            return localPage;
+            return mapWorkEntityToDto(localPage.getContent(), pageable, (int) localCount);
         }
 
         AuthorWorkSync sync =
                 syncRepository
-                        .findByAuthorDetail_Id(authorKey)
+                        .findByAuthorDetail_OlKey(authorKey)
                         .orElseGet(() ->
                                 createInitialSync(author)
                         );
 
         if (!sync.isHasNext()) {
-            return localPage;
+            return mapWorkEntityToDto(localPage.getContent(), pageable, (int) localCount);
         }
 
         syncNextBatch(author, sync);
 
-        return workRepository.findByAuthors_Id(
+        Page<Work> result = workRepository.findByAuthors_OlKey(
                 authorKey,
                 pageable
         );
+
+        return mapWorkEntityToDto(result.getContent(), pageable, (int) workRepository.countByAuthors_OlKey(authorKey));
     }
 
     private void syncNextBatch(
@@ -247,5 +212,21 @@ public class AuthorService {
             return authorKey.substring("/authors/".length());
         }
         return authorKey;
+    }
+
+    private Page<WorkDTO> mapWorkEntityToDto (List<Work> data, Pageable pageable, int total) {
+        if(data == null || data.isEmpty()) {
+            return new PageImpl<>(new ArrayList<>(), pageable, 0);
+        }
+
+        List<WorkDTO> result = data.stream().map(work -> WorkDTO.builder()
+                .workKey(work.getWorkKey())
+                .title(work.getTitle())
+                .description(work.getDescription())
+                .coverUrl(work.getCoverId())
+                .build()
+        ).toList();
+
+        return new PageImpl<>(result, pageable, total);
     }
 }

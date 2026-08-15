@@ -5,6 +5,7 @@ import org.example.bookreadingapp.dto.author.AuthorDTO;
 import org.example.bookreadingapp.dto.author.AuthorDetailDTO;
 import org.example.bookreadingapp.dto.book.WorkDTO;
 import org.example.bookreadingapp.service.AuthorService;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
@@ -45,8 +46,11 @@ public class AuthorController {
      * @return list of works by the author
      */
     @GetMapping("/{authorKey}/works")
-    public ResponseEntity<List<WorkDTO>> getAuthorWorks(@PathVariable String authorKey) {
-        List<WorkDTO> works = authorService.getAuthorWorks(authorKey);
+    public ResponseEntity<Page<WorkDTO>> getAuthorWorks(@PathVariable String authorKey,
+                                                        @RequestParam(defaultValue = "0") int offset,
+                                                        @RequestParam(defaultValue = "20") int limit) {
+        PageRequest page = PageRequest.of(offset, limit);
+        Page<WorkDTO> works = authorService.getWorksByAuthor(authorKey, page);
         return ResponseEntity.ok(works);
     }
 }

@@ -21,8 +21,8 @@ public interface WorkRepository extends JpaRepository<Work, String> {
     @EntityGraph(attributePaths = "authors")
     List<Work> findAll();
 
-    Page<Work> findByAuthors_Id(String authorId, Pageable pageable);
+    Page<Work> findByAuthors_OlKey(String olKey, Pageable pageable);
 
-    long countByAuthors_Id(String authorId);
+    long countByAuthors_OlKey(String authorId);
 }
 
