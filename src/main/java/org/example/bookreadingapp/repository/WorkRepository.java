@@ -1,6 +1,7 @@
 package org.example.bookreadingapp.repository;
 
 import org.example.bookreadingapp.entity.Work;
+import org.hibernate.annotations.BatchSize;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,6 +22,7 @@ public interface WorkRepository extends JpaRepository<Work, String> {
     @EntityGraph(attributePaths = "authors")
     List<Work> findAll();
 
+    @BatchSize(size = 20)
     Page<Work> findByAuthors_OlKey(String olKey, Pageable pageable);
 
     long countByAuthors_OlKey(String authorId);

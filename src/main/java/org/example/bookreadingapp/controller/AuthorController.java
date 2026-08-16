@@ -8,6 +8,7 @@ import org.example.bookreadingapp.service.AuthorService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,11 +47,11 @@ public class AuthorController {
      * @return list of works by the author
      */
     @GetMapping("/{authorKey}/works")
-    public ResponseEntity<Page<WorkDTO>> getAuthorWorks(@PathVariable String authorKey,
-                                                        @RequestParam(defaultValue = "0") int offset,
-                                                        @RequestParam(defaultValue = "20") int limit) {
-        PageRequest page = PageRequest.of(offset, limit);
+    public ResponseEntity<PagedModel<WorkDTO>> getAuthorWorks(@PathVariable String authorKey,
+                                                              @RequestParam(defaultValue = "0") int pageNumber,
+                                                              @RequestParam(defaultValue = "20") int limit) {
+        PageRequest page = PageRequest.of(pageNumber, limit);
         Page<WorkDTO> works = authorService.getWorksByAuthor(authorKey, page);
-        return ResponseEntity.ok(works);
+        return ResponseEntity.ok(new PagedModel<>(works));
     }
 }

@@ -35,4 +35,7 @@ public class AuthorWorkSync {
     @JoinColumn(name = "author_id", nullable = false, unique = true)
     private AuthorDetail authorDetail;
 
+    @Column(name = "total_worl")
+    private Long totalWork;
+
 }

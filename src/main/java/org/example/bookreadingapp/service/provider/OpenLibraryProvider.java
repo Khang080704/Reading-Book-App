@@ -66,7 +66,7 @@ public class OpenLibraryProvider implements SearchProvider<SearchBooksDTO.BookSe
 
         boolean hasNext = works.size() == limit;
 
-        return new ProviderWorkPage(works, hasNext, offset + works.size());
+        return new ProviderWorkPage(works, hasNext, offset + works.size(), data.getSize());
     }
 
     private List<WorkDTO> mapAuthorWorksToDto (AuthorWorksDTO authorWorksDTO) {

@@ -21,6 +21,9 @@ public class AuthorWorksDTO {
     @JsonProperty("entries")
     private List<WorkEntry> entries;
 
+    @JsonProperty("size")
+    private long size;
+
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
