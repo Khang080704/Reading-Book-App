@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.bookreadingapp.Enum.ResourceProvider;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -32,6 +33,11 @@ public class Work {
     private String description;
 
     private String coverId;
+
+    @Column(name = "resource_provider")
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private ResourceProvider resourceProvider = ResourceProvider.OPENLIBRARY;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(

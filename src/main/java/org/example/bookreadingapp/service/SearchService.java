@@ -65,7 +65,7 @@ public class SearchService {
     }
 
     public List<SearchBookDTO> getAvailableBooks() {
-        return workRepository.findAll().stream()
+        return workRepository.getAvailableBooks().stream()
                 .map(work -> SearchBookDTO.builder()
                         .authorNames(work.getAuthors().stream()
                                 .map(AuthorDetail::getFullName)

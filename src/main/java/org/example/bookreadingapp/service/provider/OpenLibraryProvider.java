@@ -72,7 +72,7 @@ public class OpenLibraryProvider implements SearchProvider<SearchBooksDTO.BookSe
     private List<WorkDTO> mapAuthorWorksToDto (AuthorWorksDTO authorWorksDTO) {
         return authorWorksDTO.getEntries().stream()
                 .map(entry -> WorkDTO.builder()
-                        .workKey(entry.getKey())
+                        .workKey(toApiId(entry.getKey()))
                         .title(entry.getTitle())
                         .description(entry.getDescription())
                         .coverUrl(entry.getCoverId() != null ?
@@ -80,5 +80,27 @@ public class OpenLibraryProvider implements SearchProvider<SearchBooksDTO.BookSe
                                 : null)
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    private String toApiId(String key) {
+        if (key == null) {
+            return null;
+        }
+
+        String normalized = key.trim();
+        if (normalized.isEmpty()) {
+            return normalized;
+        }
+
+        if (normalized.startsWith("/")) {
+            normalized = normalized.substring(1);
+        }
+
+        int lastSlash = normalized.lastIndexOf('/');
+        if (lastSlash >= 0) {
+            normalized = normalized.substring(lastSlash + 1);
+        }
+
+        return normalized;
     }
 }
