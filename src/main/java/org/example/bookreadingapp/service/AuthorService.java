@@ -109,10 +109,10 @@ public class AuthorService {
                         new RuntimeException("Author not found")
                 );
 
-        Page<Work> localPage =
-                workRepository.findByAuthors_OlKey(
-                        authorKey,
-                        pageable
+        AuthorWorkSync sync = syncRepository
+                .findByAuthorDetail_OlKey(authorKey)
+                .orElseGet(() ->
+                        createInitialSync(author)
                 );
 
         long requiredCount =
@@ -122,29 +122,32 @@ public class AuthorService {
         long localCount =
                 workRepository.countByAuthors_OlKey(authorKey);
 
-        if (localCount >= requiredCount) {
-            return mapWorkEntityToDto(localPage.getContent(), pageable, (int) localCount);
+        int syncAttempts = 0;
+        int maxSyncAttempts = 2;
+
+        while (
+                localCount < requiredCount
+                        && sync.isHasNext()
+                        && syncAttempts < maxSyncAttempts
+        ) {
+            syncNextBatch(author, sync);
+
+            localCount =
+                    workRepository.countByAuthors_OlKey(authorKey);
+
+            syncAttempts++;
         }
-
-        AuthorWorkSync sync =
-                syncRepository
-                        .findByAuthorDetail_OlKey(authorKey)
-                        .orElseGet(() ->
-                                createInitialSync(author)
-                        );
-
-        if (!sync.isHasNext()) {
-            return mapWorkEntityToDto(localPage.getContent(), pageable, (int) localCount);
-        }
-
-        syncNextBatch(author, sync);
 
         Page<Work> result = workRepository.findByAuthors_OlKey(
                 authorKey,
                 pageable
         );
 
-        return mapWorkEntityToDto(result.getContent(), pageable, (int) workRepository.countByAuthors_OlKey(authorKey));
+        long total = sync.getTotalWork() != null
+                ? sync.getTotalWork()
+                : localCount;
+
+        return mapWorkEntityToDto(result.getContent(), pageable, total);
     }
 
     private void syncNextBatch(
@@ -184,6 +187,7 @@ public class AuthorService {
 
         sync.setHasNext(response.hasNext());
         sync.setLastSyncAt(Instant.now());
+        sync.setTotalWork(response.totalElement());
 
         syncRepository.save(sync);
     }
@@ -195,6 +199,7 @@ public class AuthorService {
                 .authorDetail(author)
                 .nextOffset(0)
                 .batchSize(50)
+                .totalWork(null)
                 .hasNext(true)
                 .build();
     }
@@ -214,7 +219,7 @@ public class AuthorService {
         return authorKey;
     }
 
-    private Page<WorkDTO> mapWorkEntityToDto (List<Work> data, Pageable pageable, int total) {
+    private Page<WorkDTO> mapWorkEntityToDto (List<Work> data, Pageable pageable, long total) {
         if(data == null || data.isEmpty()) {
             return new PageImpl<>(new ArrayList<>(), pageable, 0);
         }

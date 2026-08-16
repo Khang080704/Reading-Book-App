@@ -5,6 +5,7 @@ import java.util.List;
 public record ProviderWorkPage(
         List<WorkDTO> works,
         boolean hasNext,
-        int nextOffset
+        int nextOffset,
+        long totalElement
 ) {
 }
