@@ -2,6 +2,7 @@ package org.example.bookreadingapp.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.bookreadingapp.Enum.ResourceProvider;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -27,6 +28,11 @@ public class AuthorDetail {
     private String fullName;
     @Column(length = 2000)
     private String bio;
+
+    @Column(name = "resource_provider")
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private ResourceProvider resourceProvider = ResourceProvider.OPENLIBRARY;
 
     private LocalDateTime createdAt;
     private LocalDateTime lastModify;
