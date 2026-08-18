@@ -37,7 +37,7 @@ public class Work {
     @Column(name = "resource_provider")
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private ResourceProvider resourceProvider = ResourceProvider.OPENLIBRARY;
+    private ResourceProvider resourceProvider = ResourceProvider.OPEN_LIBRARY;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(

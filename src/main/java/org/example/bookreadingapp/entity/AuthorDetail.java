@@ -32,7 +32,7 @@ public class AuthorDetail {
     @Column(name = "resource_provider")
     @Enumerated(EnumType.STRING)
     @Builder.Default
-    private ResourceProvider resourceProvider = ResourceProvider.OPENLIBRARY;
+    private ResourceProvider resourceProvider = ResourceProvider.OPEN_LIBRARY;
 
     private LocalDateTime createdAt;
     private LocalDateTime lastModify;
