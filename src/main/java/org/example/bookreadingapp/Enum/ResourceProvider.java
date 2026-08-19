@@ -2,6 +2,6 @@ package org.example.bookreadingapp.Enum;
 
 public enum ResourceProvider {
     INTERNAL,
-    OPENLIBRARY,
+    OPEN_LIBRARY,
     GOOGLE
 }
