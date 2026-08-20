@@ -5,6 +5,7 @@ import lombok.*;
 import org.example.bookreadingapp.Enum.ReadingMode;
 import org.example.bookreadingapp.Enum.ResourceProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -31,6 +32,16 @@ public class ReadingResource {
     @Column(name = "reading_mode")
     private ReadingMode readingMode;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "readingResource", fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<Chapter> chapters;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "readingResource", orphanRemoval = true)
+    @Builder.Default
+    private List<Chapter> chapters = new ArrayList<>();
+
+    public void addChapter(Chapter chapter) {
+        chapters.add(chapter);
+        chapter.setReadingResource(this);
+    }
+
+    public void clearChapters() {
+        chapters.clear();
+    }
 }
