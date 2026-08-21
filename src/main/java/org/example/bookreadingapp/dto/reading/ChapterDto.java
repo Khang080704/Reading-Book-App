@@ -12,4 +12,8 @@ import lombok.NoArgsConstructor;
 public class ChapterDto {
     private String id;
     private String title;
+    private Integer order;
+
+    @Builder.Default
+    private String content = "";
 }

@@ -10,6 +10,7 @@ import org.example.bookreadingapp.repository.ReadingResourceRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -31,10 +32,11 @@ public class ReadingResourceService {
     }
 
     public List<ChapterDto> getChaptersByReadingResourceId(String readingResourceId) {
-        List<Chapter> data = readingResourceRepository.getChaptersByReadingResourceId(readingResourceId).getChapters();
+        Set<Chapter> data = readingResourceRepository.getChaptersByReadingResourceId(readingResourceId).getChapters();
         return data.stream().map(chapter -> ChapterDto.builder()
                         .id(chapter.getId())
                         .title(chapter.getTitle())
+                        .order(chapter.getIndexOrder())
                         .build())
                         .toList();
     }

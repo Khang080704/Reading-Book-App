@@ -11,7 +11,7 @@ import org.example.bookreadingapp.entity.ReadingResource;
 import org.example.bookreadingapp.entity.Work;
 import org.example.bookreadingapp.repository.ReadingResourceRepository;
 import org.example.bookreadingapp.repository.WorkRepository;
-import org.example.bookreadingapp.service.reader.EpubDocumentReader;
+import org.example.bookreadingapp.service.reader.epub.EpubDocumentReader;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

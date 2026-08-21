@@ -53,7 +53,7 @@ public class Work {
     private List<Edition> editions = new ArrayList<>();
 
     @OneToMany(mappedBy = "work", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<ReadingResource> readingResources;
+    private Set<ReadingResource> readingResources;
 
     public void addEdition(Edition edition) {
         editions.add(edition);

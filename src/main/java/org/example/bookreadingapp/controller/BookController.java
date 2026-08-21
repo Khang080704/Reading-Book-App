@@ -59,7 +59,7 @@ public class BookController {
         return ResponseEntity.ok(searchService.getEditionDetails(editionKey));
     }
 
-    @GetMapping("works/{workKey}/reading-resource")
+    @GetMapping("/works/{workKey}/reading-resource")
     public ResponseEntity<ReadingResourceDto> getReadingResource(@PathVariable String workKey) {
         return ResponseEntity.ok(readingResourceService.isReading(workKey));
     }

@@ -1,9 +1,11 @@
-package org.example.bookreadingapp.service.reader;
+package org.example.bookreadingapp.service.reader.epub;
 
+import lombok.extern.slf4j.Slf4j;
 import org.example.bookreadingapp.Enum.BookFormat;
 import org.example.bookreadingapp.dto.reading.ParsedBook;
 import org.example.bookreadingapp.dto.reading.ParsedChapter;
 import org.example.bookreadingapp.dto.reading.TocEntry;
+import org.example.bookreadingapp.service.reader.BookDocumentReader;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.springframework.core.io.Resource;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+@Slf4j
 @Component
 public class EpubDocumentReader implements BookDocumentReader {
 
@@ -56,8 +59,7 @@ public class EpubDocumentReader implements BookDocumentReader {
                                  tempFile.toFile()
                          )) {
 
-                String opfPath =
-                        findOpfPath(zip);
+                String opfPath = findOpfPath(zip);
 
                 org.w3c.dom.Document opf =
                         parseXml(
@@ -83,9 +85,7 @@ public class EpubDocumentReader implements BookDocumentReader {
                                 "language"
                         );
 
-                Map<String, ManifestItem>
-                        manifest =
-                        parseManifest(opf);
+                Map<String, ManifestItem> manifest = parseManifest(opf);
 
                 List<TocEntry> toc =
                         parseNavigation(
@@ -135,8 +135,7 @@ public class EpubDocumentReader implements BookDocumentReader {
 
     private String findOpfPath(ZipFile zip) throws Exception {
 
-        ZipEntry entry =
-                zip.getEntry("META-INF/container.xml");
+        ZipEntry entry = zip.getEntry("META-INF/container.xml");
 
         if (entry == null) {
             throw new IllegalArgumentException(
@@ -322,13 +321,18 @@ public class EpubDocumentReader implements BookDocumentReader {
         return manifest
                 .values()
                 .stream()
-                .filter(item ->
-                        item.properties() != null
-                                && Arrays
-                                .asList(
-                                        item.properties().split("\\s+")
-                                )
-                                .contains("nav")
+                .filter(item -> {
+                        if (item.properties().equals("nav")) {
+                            return true;
+                        }
+                        if(item.href().equals("toc.xhtml")) {
+                            return true;
+                        }
+                        if(item.href().equals("toc.ncx")) {
+                            return true;
+                        }
+                        return false;
+                    }
                 )
                 .findFirst()
                 .orElseThrow(() ->
@@ -348,6 +352,7 @@ public class EpubDocumentReader implements BookDocumentReader {
                 opfDirectory,
                 navItem.href()
         );
+        log.info("navPath: {}", navPath);
 
         ZipEntry entry = zip.getEntry(navPath);
 
@@ -379,6 +384,10 @@ public class EpubDocumentReader implements BookDocumentReader {
                 toc = document.selectFirst("nav[role=doc-toc]");
             }
 
+            if(toc == null) {
+                toc = document.selectFirst("navmap");
+            }
+
             if (toc == null) {
                 throw new IllegalArgumentException(
                         "TOC navigation not found"
@@ -388,7 +397,6 @@ public class EpubDocumentReader implements BookDocumentReader {
             List<TocEntry> result = new ArrayList<>();
 
             for (Element link : toc.select("a[href]")) {
-
                 String title = link.text().trim();
 
                 String href = link.attr("href").trim();
@@ -397,12 +405,15 @@ public class EpubDocumentReader implements BookDocumentReader {
                     continue;
                 }
 
-                result.add(
-                        new TocEntry(
-                                title,
-                                href
-                        )
-                );
+                result.add(new TocEntry(title, href));
+            }
+
+            if(result.isEmpty()) {
+                for(Element link : toc.select("navPoint")) {
+                    String title = link.selectFirst("text").text().trim();
+                    String content = link.selectFirst("content").attr("src").trim();
+                    result.add(new TocEntry(title, content));
+                }
             }
 
             return result;
@@ -460,30 +471,26 @@ public class EpubDocumentReader implements BookDocumentReader {
                             href
                     );
 
-            // không phải chapter thật
-            if (chapterElement == null) {
-                continue;
-            }
 
             String content =
                     extractParagraphs(
-                            chapterElement
+                            document
                     );
 
             if (content.isBlank()) {
                 continue;
             }
 
-            String title =
-                    extractChapterTitle(
-                            chapterElement,
-                            tocEntry.title()
-                    );
+//            String title =
+//                    extractChapterTitle(
+//                            chapterElement,
+//                            tocEntry.title()
+//                    );
 
             result.add(
                     new ParsedChapter(
                             order++,
-                            title,
+                            tocEntry.title(),
                             content
                     )
             );
@@ -514,8 +521,7 @@ public class EpubDocumentReader implements BookDocumentReader {
 
     private Element findChapterElement(org.jsoup.nodes.Document document, String href) {
 
-        String fragment =
-                extractFragment(href);
+        String fragment = extractFragment(href);
 
         Element target;
 
@@ -526,10 +532,7 @@ public class EpubDocumentReader implements BookDocumentReader {
          */
         if (fragment != null) {
 
-            target =
-                    document.getElementById(
-                            fragment
-                    );
+            target = document.getElementById(fragment);
 
             if (target == null) {
                 return null;
