@@ -18,7 +18,7 @@ import java.util.List;
 public class ReadingResourceController {
     private final ReadingResourceService readingResourceService;
 
-    @GetMapping("/{resource_id}")
+    @GetMapping("/{resource_id}/chapters")
     public ResponseEntity<List<ChapterDto>> getChapters(@PathVariable String resource_id) {
         return ResponseEntity.ok(readingResourceService.getChaptersByReadingResourceId(resource_id));
     }

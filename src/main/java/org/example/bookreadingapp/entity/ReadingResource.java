@@ -6,7 +6,9 @@ import org.example.bookreadingapp.Enum.ReadingMode;
 import org.example.bookreadingapp.Enum.ResourceProvider;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "reading_resource")
@@ -34,7 +36,7 @@ public class ReadingResource {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "readingResource", orphanRemoval = true)
     @Builder.Default
-    private List<Chapter> chapters = new ArrayList<>();
+    private Set<Chapter> chapters = new HashSet<>();
 
     public void addChapter(Chapter chapter) {
         chapters.add(chapter);

@@ -46,10 +46,7 @@ public class BookContentSeed implements CommandLineRunner {
             return;
         }
 
-        Resource resource =
-                new ClassPathResource(
-                        "books/dracula.epub"
-                );
+        Resource resource = new ClassPathResource("books/dracula.epub");
 
         bookImportService.importEpub(
                 workKey,

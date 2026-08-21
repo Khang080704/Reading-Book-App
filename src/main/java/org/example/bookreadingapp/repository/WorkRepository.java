@@ -20,7 +20,7 @@ public interface WorkRepository extends JpaRepository<Work, String> {
     boolean existsByWorkKey(String workKey);
 
 
-    @Query("select w from Work w join fetch w.readingResources r")
+    @Query("select distinct w from Work w join fetch w.readingResources r join fetch r.chapters c where c.content is not null")
     List<Work> getAvailableBooks();
 
     @BatchSize(size = 20)
