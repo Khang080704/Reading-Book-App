@@ -16,6 +16,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -25,7 +27,7 @@ public class BookImportService {
     private final EpubDocumentReader epubDocumentReader;
 
     @Transactional
-    public ReadingResource importEpub(String workKey, Resource epubResource) {
+    public ReadingResource importEpub(String workKey, Resource epubResource, ResourceProvider resourceProvider) {
         Work work = workRepository.findByWorkKey(workKey)
                 .orElseThrow(() ->
                         new IllegalArgumentException(
@@ -37,7 +39,7 @@ public class BookImportService {
         ReadingResource readingResource =
                 ReadingResource.builder()
                         .work(work)
-                        .resourceProvider(ResourceProvider.GUTENBERG)
+                        .resourceProvider(resourceProvider != null ? resourceProvider : ResourceProvider.INTERNAL)
                         .readingMode(ReadingMode.CHAPTER)
                         .build();
 

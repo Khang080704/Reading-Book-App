@@ -8,6 +8,7 @@ import org.example.bookreadingapp.dto.reading.TocEntry;
 import org.example.bookreadingapp.service.reader.BookDocumentReader;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
+import org.jsoup.parser.Parser;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.NodeList;
@@ -308,9 +309,11 @@ public class EpubDocumentReader implements BookDocumentReader {
             return href;
         }
 
+        String cleanHref = href.replaceAll("^(\\.\\./|\\./)+", "");
+
         return Path
                 .of(parent)
-                .resolve(href)
+                .resolve(cleanHref)
                 .normalize()
                 .toString()
                 .replace("\\", "/");
@@ -377,7 +380,8 @@ public class EpubDocumentReader implements BookDocumentReader {
              *
              * <nav epub:type="toc">
              */
-            Element toc = document.selectFirst("nav[epub\\:type=toc]");
+            Element toc = document.selectFirst("nav");
+            log.info("toc: {}", toc);
 
             // Một số EPUB dùng role="doc-toc"
             if (toc == null) {
