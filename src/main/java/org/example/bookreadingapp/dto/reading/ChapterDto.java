@@ -4,16 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class ChapterDto {
-    private String id;
-    private String title;
-    private Integer order;
-
-    @Builder.Default
-    private String content = "";
+    protected String id;
+    protected String title;
+    protected Integer order;
 }

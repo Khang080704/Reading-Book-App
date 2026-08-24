@@ -11,11 +11,14 @@ import org.example.bookreadingapp.entity.ReadingResource;
 import org.example.bookreadingapp.entity.Work;
 import org.example.bookreadingapp.repository.ReadingResourceRepository;
 import org.example.bookreadingapp.repository.WorkRepository;
+import org.example.bookreadingapp.service.filestorage.BookStorage;
+import org.example.bookreadingapp.service.reader.BookDocumentReader;
 import org.example.bookreadingapp.service.reader.epub.EpubDocumentReader;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,6 +28,9 @@ public class BookImportService {
     private final WorkRepository workRepository;
     private final ReadingResourceRepository readingResourceRepository;
     private final EpubDocumentReader epubDocumentReader;
+
+    private final List<BookDocumentReader> readers;
+    private final List<BookStorage> storages;
 
     @Transactional
     public ReadingResource importEpub(String workKey, Resource epubResource, ResourceProvider resourceProvider) {

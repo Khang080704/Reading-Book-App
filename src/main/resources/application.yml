@@ -41,3 +41,8 @@ spring:
     baseline-on-migrate: true
     password: ${POSTGRES_PASSWORD}
 
+book:
+  storage:
+    filesystem:
+      root: ${BOOK_STORAGE_FILESYSTEM_ROOT}
+

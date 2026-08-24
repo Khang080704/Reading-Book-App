@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Repository
 public interface WorkRepository extends JpaRepository<Work, String> {
-    @EntityGraph(attributePaths = "authors")
+    @EntityGraph(attributePaths = {"authors", "readingResources"})
     Optional<Work> findByWorkKey(String workKey);
 
     boolean existsByWorkKey(String workKey);
