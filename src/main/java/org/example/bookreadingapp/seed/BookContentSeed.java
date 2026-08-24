@@ -29,6 +29,8 @@ public class BookContentSeed implements CommandLineRunner {
         seedDracula();
         seedHarryPotterAndSorcererStone();
         seedHarryPotterAndChampterOfSecret();
+        seedHarryPotterAndGobletOfFire();
+        seedHarryPotterAndHalfBloodPrince();
     }
 
     private void seedDracula() {
@@ -48,6 +50,16 @@ public class BookContentSeed implements CommandLineRunner {
         String classPath = "books/HP_And_Champer_Secret.epub";
         seedData(workKey, classPath, ResourceProvider.INTERNAL);
     }
+    private void seedHarryPotterAndGobletOfFire() {
+        String workKey = "OL82560W";
+        String classPath = "books/HP_And_Goblet_of_Fire.epub";
+        seedData(workKey, classPath, ResourceProvider.INTERNAL);
+    }
+    private void seedHarryPotterAndHalfBloodPrince(){
+        String workKey = "OL82565W";
+        String classPath = "books/HP_And_Halfblood_Prince.epub";
+        seedData(workKey, classPath, ResourceProvider.INTERNAL);
+    }
 
     private void seedData(String workKey, String classPath, ResourceProvider resourceProvider) {
         Work work = workRepository
@@ -59,7 +71,7 @@ public class BookContentSeed implements CommandLineRunner {
                 );
 
         boolean alreadyImported = readingResourceRepository
-                .existsByWorkIdAndResourceProvider(work.getId(), ResourceProvider.GUTENBERG);
+                .existsByWorkIdAndResourceProvider(work.getId(), resourceProvider);
 
         log.info("Book import status for title {} is {}", work.getTitle(), alreadyImported);
 

@@ -70,7 +70,7 @@ public class EpubDocumentReaderTest {
 
         Resource resource =
                 new ClassPathResource(
-                        "books/HP_And_Goblet_Of_Fire.epub"
+                        "books/HP_And_Halfblood_Prince.epub"
                 );
 
         EpubDocumentReader reader =

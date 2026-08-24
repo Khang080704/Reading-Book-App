@@ -380,7 +380,11 @@ public class EpubDocumentReader implements BookDocumentReader {
              *
              * <nav epub:type="toc">
              */
-            Element toc = document.selectFirst("nav");
+            Element toc = document.select("nav").stream().filter(nav ->
+                    "toc".equals(nav.attr("epub:type")))
+                    .findFirst()
+                    .orElse(null);
+
             log.info("toc: {}", toc);
 
             // Một số EPUB dùng role="doc-toc"

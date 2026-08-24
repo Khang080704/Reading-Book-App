@@ -33,7 +33,7 @@ public class ReadingResourceService {
 
     public List<ChapterDto> getChaptersByReadingResourceId(String readingResourceId) {
         Set<Chapter> data = readingResourceRepository.getChaptersByReadingResourceId(readingResourceId).getChapters();
-        return data.stream().map(chapter -> ChapterDto.builder()
+        return (List<ChapterDto>) data.stream().map(chapter -> ChapterDto.builder()
                         .id(chapter.getId())
                         .title(chapter.getTitle())
                         .order(chapter.getIndexOrder())
