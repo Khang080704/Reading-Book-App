@@ -25,6 +25,7 @@ public class ReadingResourceService {
                         .resourceId(readingResource.getId())
                         .provider(readingResource.getResourceProvider().name())
                         .readingMode(readingResource.getReadingMode())
+                        .language(readingResource.getLanguage())
                         .build())
                 .orElseGet(() -> ReadingResourceDto.builder()
                         .isAvailable(false)

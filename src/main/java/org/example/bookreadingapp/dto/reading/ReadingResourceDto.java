@@ -15,4 +15,5 @@ public class ReadingResourceDto {
     private String resourceId;
     private String provider;
     private ReadingMode readingMode;
+    private String language;
 }

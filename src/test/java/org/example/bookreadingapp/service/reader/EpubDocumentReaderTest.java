@@ -37,85 +37,47 @@ public class EpubDocumentReaderTest {
                 "Language: " + book.language()
         );
 
-        System.out.println(
-                "Chapters: " + book.chapters().size()
-        );
+
+        assert !book.chapters().isEmpty();
 
         for (ParsedChapter chapter :
                 book.chapters()) {
 
-            System.out.println(
-                    "\n===== "
-                            + chapter.order()
-                            + " - "
-                            + chapter.title()
-                            + " ====="
-            );
-
-            System.out.println(
-                    chapter.content()
-                            .substring(
-                                    0,
-                                    Math.min(
-                                            300,
-                                            chapter.content().length()
-                                    )
-                            )
-            );
+            assert chapter.content().length() == 300;
         }
     }
 
     @Test
     void testReadEpubWithHarryPotter() {
 
-        Resource resource =
-                new ClassPathResource(
-                        "books/HP_And_Halfblood_Prince.epub"
-                );
+        String[] data = {
+                "books/HP_And_Champer_Secret.epub",
+                "books/HP_And_Goblet_Of_Fire.epub",
+                "books/HP_And_Prison_Of_Azkaban.epub",
+                "books/HP_And_Halfblood_Prince.epub"
+        };
 
-        EpubDocumentReader reader =
-                new EpubDocumentReader();
+        for(String item : data) {
+            Resource resource =
+                    new ClassPathResource(
+                            item
+                    );
+            EpubDocumentReader reader =
+                    new EpubDocumentReader();
 
-        ParsedBook book =
-                reader.read(resource);
+            ParsedBook book = reader.read(resource);
 
-        System.out.println(
-                "Title: " + book.title()
-        );
 
-        System.out.println(
-                "Author: " + book.author()
-        );
+            assert !book.chapters().isEmpty();
 
-        System.out.println(
-                "Language: " + book.language()
-        );
+            for (ParsedChapter chapter :
+                    book.chapters()) {
 
-        System.out.println(
-                "Chapters: " + book.chapters().size()
-        );
+                assert !chapter.title().isEmpty();
+                assert !chapter.content().isEmpty();
+            }
 
-        for (ParsedChapter chapter :
-                book.chapters()) {
-
-            System.out.println(
-                    "\n===== "
-                            + chapter.order()
-                            + " - "
-                            + chapter.title()
-                            + " ====="
-            );
-
-            System.out.println(
-                    chapter.content()
-                            .substring(
-                                    0,
-                                    Math.min(
-                                            300,
-                                            chapter.content().length()
-                                    )
-                            )
-            );
         }
+
     }
 }
