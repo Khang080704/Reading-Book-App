@@ -24,7 +24,7 @@ public class FileSystemStorage implements BookStorage{
     }
 
     @Override
-    public Resource load(String location, StorageType storageType) {
+    public Resource load(String location) {
         Path file = rootPath
                         .resolve(location)
                         .normalize();

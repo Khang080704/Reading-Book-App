@@ -38,6 +38,8 @@ public class ReadingResource {
     @Builder.Default
     private Set<Chapter> chapters = new HashSet<>();
 
+    private String language;
+
     public void addChapter(Chapter chapter) {
         chapters.add(chapter);
         chapter.setReadingResource(this);

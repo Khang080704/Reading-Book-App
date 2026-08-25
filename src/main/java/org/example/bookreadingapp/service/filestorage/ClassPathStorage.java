@@ -13,7 +13,7 @@ public class ClassPathStorage implements BookStorage{
     }
 
     @Override
-    public Resource load(String location, StorageType storageType) {
+    public Resource load(String location) {
         return new ClassPathResource(location);
     }
 }

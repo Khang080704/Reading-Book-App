@@ -2,11 +2,15 @@ package org.example.bookreadingapp.seed;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.bookreadingapp.Enum.BookFormat;
 import org.example.bookreadingapp.Enum.ResourceProvider;
+import org.example.bookreadingapp.Enum.StorageType;
 import org.example.bookreadingapp.entity.Work;
 import org.example.bookreadingapp.repository.ReadingResourceRepository;
 import org.example.bookreadingapp.repository.WorkRepository;
 import org.example.bookreadingapp.service.BookImportService;
+import org.example.bookreadingapp.service.filestorage.BookStorage;
+import org.example.bookreadingapp.service.filestorage.ClassPathStorage;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -80,12 +84,12 @@ public class BookContentSeed implements CommandLineRunner {
             return;
         }
 
-        Resource resource = new ClassPathResource(classPath);
-
         bookImportService.importEpub(
                 workKey,
-                resource,
-                resourceProvider
+                BookFormat.EPUB,
+                StorageType.CLASSPATH,
+                classPath,
+                ResourceProvider.INTERNAL
         );
     }
 }

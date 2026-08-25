@@ -2,8 +2,10 @@ package org.example.bookreadingapp.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.bookreadingapp.Enum.BookFormat;
 import org.example.bookreadingapp.Enum.ReadingMode;
 import org.example.bookreadingapp.Enum.ResourceProvider;
+import org.example.bookreadingapp.Enum.StorageType;
 import org.example.bookreadingapp.dto.reading.ParsedBook;
 import org.example.bookreadingapp.dto.reading.ParsedChapter;
 import org.example.bookreadingapp.entity.Chapter;
@@ -27,13 +29,16 @@ import java.util.Optional;
 public class BookImportService {
     private final WorkRepository workRepository;
     private final ReadingResourceRepository readingResourceRepository;
-    private final EpubDocumentReader epubDocumentReader;
 
     private final List<BookDocumentReader> readers;
     private final List<BookStorage> storages;
 
     @Transactional
-    public ReadingResource importEpub(String workKey, Resource epubResource, ResourceProvider resourceProvider) {
+    public ReadingResource importEpub(String workKey,
+                                      BookFormat bookFormat,
+                                      StorageType storageType,
+                                      String storagePath,
+                                      ResourceProvider resourceProvider) {
         Work work = workRepository.findByWorkKey(workKey)
                 .orElseThrow(() ->
                         new IllegalArgumentException(
@@ -41,12 +46,33 @@ public class BookImportService {
                         )
                 );
 
-        ParsedBook parsedBook = epubDocumentReader.read(epubResource);
+        BookStorage storage = storages.stream()
+                .filter(s -> s.support(storageType))
+                .findFirst()
+                .orElseThrow(() ->
+                        new IllegalArgumentException(
+                                "No storage found for type: " + storageType
+                        )
+                );
+
+        Resource epubResource = storage.load(storagePath);
+        BookDocumentReader reader = readers.stream()
+                .filter(r -> r.support(bookFormat))
+                .findFirst()
+                .orElseThrow(() ->
+                        new IllegalArgumentException(
+                                "No reader found for format: " + bookFormat
+                        )
+                );
+
+        ParsedBook parsedBook = reader.read(epubResource);
+
         ReadingResource readingResource =
                 ReadingResource.builder()
                         .work(work)
                         .resourceProvider(resourceProvider != null ? resourceProvider : ResourceProvider.INTERNAL)
                         .readingMode(ReadingMode.CHAPTER)
+                        .language(parsedBook.language())
                         .build();
 
 

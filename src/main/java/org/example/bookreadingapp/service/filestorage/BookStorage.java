@@ -5,5 +5,5 @@ import org.springframework.core.io.Resource;
 
 public interface BookStorage {
     boolean support(StorageType storageType);
-    Resource load(String location, StorageType storageType);
+    Resource load(String location);
 }
