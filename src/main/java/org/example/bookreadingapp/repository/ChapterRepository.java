@@ -9,9 +9,9 @@ import java.util.Optional;
 
 @Repository
 public interface ChapterRepository extends JpaRepository<Chapter, String> {
-    @Query("select c from Chapter c where c.indexOrder < :order and c.readingResource.id = :resourceId")
+    @Query("select c from Chapter c where c.indexOrder + 1 = :order and c.readingResource.id = :resourceId")
     Optional<Chapter> findPreviousChapter(int order, String resourceId);
 
-    @Query("select c from Chapter c where c.indexOrder > :order and c.readingResource.id = :resourceId")
+    @Query("select c from Chapter c where c.indexOrder - 1 = :order and c.readingResource.id = :resourceId")
     Optional<Chapter> findNextChapter(int order, String resourceId);
 }

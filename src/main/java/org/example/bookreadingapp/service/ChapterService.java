@@ -30,6 +30,7 @@ public class ChapterService {
                 .order(chapter.getIndexOrder())
                 .nextChapterId(next.isPresent() ? next.get().getId() : null)
                 .prevChapterId(prev.isPresent() ? prev.get().getId() : null)
+                .resourceId(chapter.getReadingResource().getId())
                 .build();
     }
 }
