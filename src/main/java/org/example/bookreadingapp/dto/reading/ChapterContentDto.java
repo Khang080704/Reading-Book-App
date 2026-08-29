@@ -12,4 +12,5 @@ public class ChapterContentDto extends ChapterDto {
     private String prevChapterId;
     private String nextChapterId;
     private String content;
+    private String resourceId;
 }
