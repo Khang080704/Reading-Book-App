@@ -55,6 +55,7 @@ services:
       REDIS_HOST: redis
       KEYCLOAK_ISSUER_URI: http://localhost:9000/realms/book-store-auth
       KEYCLOAK_JWK_SET_URI: http://keycloak:8080/realms/book-store-auth/protocol/openid-connect/certs
+      BOOK_STORAGE_FILESYSTEM_ROOT: /data/books
     container_name: book-store-backend
     ports:
       - "8081:8081"
