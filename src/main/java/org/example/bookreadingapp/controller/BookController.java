@@ -62,7 +62,7 @@ public class BookController {
     }
 
     @GetMapping("/works/{workKey}/reading-resource")
-    public ResponseEntity<ReadingResourceDto> getReadingResource(@PathVariable String workKey) {
+    public ResponseEntity<List<ReadingResourceDto>> getReadingResource(@PathVariable String workKey) {
         return ResponseEntity.ok(readingResourceService.isReading(workKey));
     }
 

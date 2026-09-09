@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 public class S3Storage implements BookStorage {
     private final ResourceLoader resourceLoader;
 
+    @Autowired
     public S3Storage(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
     }
