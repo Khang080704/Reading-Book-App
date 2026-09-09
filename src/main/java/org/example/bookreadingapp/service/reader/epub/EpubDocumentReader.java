@@ -355,7 +355,6 @@ public class EpubDocumentReader implements BookDocumentReader {
                 opfDirectory,
                 navItem.href()
         );
-        log.info("navPath: {}", navPath);
 
         ZipEntry entry = zip.getEntry(navPath);
 
@@ -385,7 +384,6 @@ public class EpubDocumentReader implements BookDocumentReader {
                     .findFirst()
                     .orElse(null);
 
-            log.info("toc: {}", toc);
 
             // Một số EPUB dùng role="doc-toc"
             if (toc == null) {

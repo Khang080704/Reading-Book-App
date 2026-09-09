@@ -102,7 +102,7 @@ public class BookContentSeed implements CommandLineRunner {
                 BookFormat.EPUB,
                 StorageType.CLASSPATH,
                 classPath,
-                ResourceProvider.INTERNAL
+                resourceProvider
         );
     }
 
@@ -131,7 +131,7 @@ public class BookContentSeed implements CommandLineRunner {
                 BookFormat.EPUB,
                 StorageType.S3,
                 s3ClassPath,
-                ResourceProvider.INTERNAL
+                resourceProvider
         );
     }
 }

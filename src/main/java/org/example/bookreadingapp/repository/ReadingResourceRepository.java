@@ -7,13 +7,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface ReadingResourceRepository extends JpaRepository<ReadingResource, String> {
 
     @Query("SELECT  r from ReadingResource r join fetch r.work w where w.workKey = :workKey")
-    Optional<ReadingResource> findByWorkKey(String workKey);
+    List<ReadingResource> findByWorkKey(String workKey);
 
     @EntityGraph(attributePaths = {"chapters"})
     @Query("select r from ReadingResource r where r.id = :readingResourceId")

@@ -9,8 +9,10 @@ import org.example.bookreadingapp.entity.ReadingResource;
 import org.example.bookreadingapp.repository.ReadingResourceRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,8 +20,8 @@ import java.util.Set;
 public class ReadingResourceService {
     private final ReadingResourceRepository readingResourceRepository;
 
-    public ReadingResourceDto isReading(String workKey) {
-        return readingResourceRepository.findByWorkKey(workKey)
+    public List<ReadingResourceDto> isReading(String workKey) {
+        return readingResourceRepository.findByWorkKey(workKey).stream()
                 .map(readingResource -> ReadingResourceDto.builder()
                         .isAvailable(true)
                         .resourceId(readingResource.getId())
@@ -27,18 +29,24 @@ public class ReadingResourceService {
                         .readingMode(readingResource.getReadingMode())
                         .language(readingResource.getLanguage())
                         .build())
-                .orElseGet(() -> ReadingResourceDto.builder()
-                        .isAvailable(false)
-                        .build());
+                .toList();
     }
 
     public List<ChapterDto> getChaptersByReadingResourceId(String readingResourceId) {
         Set<Chapter> data = readingResourceRepository.getChaptersByReadingResourceId(readingResourceId).getChapters();
-        return (List<ChapterDto>) data.stream().map(chapter -> ChapterDto.builder()
-                        .id(chapter.getId())
-                        .title(chapter.getTitle())
-                        .order(chapter.getIndexOrder())
-                        .build())
-                        .toList();
+        List<ChapterDto> result = new ArrayList<>();
+
+        for (Chapter chapter : data) {
+            ChapterDto dto =
+                    ChapterDto.builder()
+                            .id(chapter.getId())
+                            .order(chapter.getIndexOrder())
+                            .title(chapter.getTitle())
+                            .build();
+
+            result.add(dto);
+        }
+
+        return result;
     }
 }
