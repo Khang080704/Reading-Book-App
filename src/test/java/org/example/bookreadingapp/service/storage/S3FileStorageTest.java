@@ -55,7 +55,6 @@ public class S3FileStorageTest {
         String actualContent = s3Storage.readFIleFromS3(bucketName, testFileName);
 
         String data = actualContent.substring(0 , 300);
-        System.out.println(data);
 
         assertNotNull(actualContent);
         assertEquals(300, data.length());

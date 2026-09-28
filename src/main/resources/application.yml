@@ -7,13 +7,13 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${KEYCLOAK_ISSUER_URI}
-          jwk-set-uri: ${KEYCLOAK_JWK_SET_URI}
+          issuer-uri: ${KEYCLOAK_ISSUER_URI:}
+          jwk-set-uri: ${KEYCLOAK_JWK_SET_URI:}
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${POSTGRES_URL}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    url: ${POSTGRES_URL:}
+    username: ${POSTGRES_USER:}
+    password: ${POSTGRES_PASSWORD:}
   jpa:
     hibernate:
       ddl-auto: validate
@@ -21,9 +21,9 @@ spring:
     show-sql: true
   data:
     redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
-      password: ${REDIS_PASSWORD}
+      host: ${REDIS_HOST:}
+      port: ${REDIS_PORT:}
+      password: ${REDIS_PASSWORD:}
       ssl:
         enabled: false
   cache:
@@ -35,20 +35,20 @@ spring:
         connection-timeout: 5000
     aws:
       credentials:
-        access-key: ${AWS_ACCESS_KEY}
-        secret-key: ${AWS_SECRET_KEY}
+        access-key: ${AWS_ACCESS_KEY:}
+        secret-key: ${AWS_SECRET_KEY:}
       region:
         static: ap-southeast-2
 
   flyway:
-    url: ${POSTGRES_URL}
-    user: ${POSTGRES_USER}
+    url: ${POSTGRES_URL:}
+    user: ${POSTGRES_USER:}
     enabled: true
     baseline-on-migrate: true
-    password: ${POSTGRES_PASSWORD}
+    password: ${POSTGRES_PASSWORD:}
 
 book:
   storage:
     filesystem:
-      root: ${BOOK_STORAGE_FILESYSTEM_ROOT}
+      root: ${BOOK_STORAGE_FILESYSTEM_ROOT:}
 
