@@ -22,24 +22,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
-    @Mock
-    private UserRepository userRepository;
-    @Mock
-    private SecurityContext securityContext;
-    @Mock
-    private Authentication authentication;
-
-    @InjectMocks
-    private UserService userService;
-
-    @BeforeEach
-    void setUp() {
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        when(authentication.getPrincipal()).thenReturn("email@gmail.com");
-
-        SecurityContextHolder.setContext(securityContext);
-
-    }
 
     // @Test
     // public void should_return_user() {
@@ -61,10 +43,5 @@ public class UserServiceTest {
 
     // }
 
-
-    @AfterEach
-    void tearDown() {
-        SecurityContextHolder.clearContext();
-    }
 
 }

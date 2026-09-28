@@ -21,4 +21,6 @@ public interface ReadingResourceRepository extends JpaRepository<ReadingResource
     ReadingResource getChaptersByReadingResourceId(String readingResourceId);
 
     boolean existsByWorkIdAndResourceProvider(String workId, ResourceProvider provider);
+
+    boolean existsByWorkIdAndResourceProviderAndSourceUrl(String workId, ResourceProvider provider, String source);
 }

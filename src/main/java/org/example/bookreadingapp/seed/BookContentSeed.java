@@ -48,7 +48,7 @@ public class BookContentSeed implements CommandLineRunner {
         String workKey = "OL85892W";
         String fileName = "dracula.epub";
 
-        seedDataWithAws(workKey, bucket, fileName, ResourceProvider.INTERNAL);
+        seedDataWithAws(workKey, bucket, fileName, ResourceProvider.GUTENBERG);
     }
 
     private void seedHarryPotterAndSorcererStone() {
@@ -88,7 +88,7 @@ public class BookContentSeed implements CommandLineRunner {
                 );
 
         boolean alreadyImported = readingResourceRepository
-                .existsByWorkIdAndResourceProvider(work.getId(), resourceProvider);
+                .existsByWorkIdAndResourceProviderAndSourceUrl(work.getId(), resourceProvider, classPath);
 
         log.info("Book import status for title {} is {}", work.getTitle(), alreadyImported);
 
@@ -115,8 +115,10 @@ public class BookContentSeed implements CommandLineRunner {
                         )
                 );
 
+        String s3ClassPath = String.format("s3://%s/%s", bucket, fileName);
+
         boolean alreadyImported = readingResourceRepository
-                .existsByWorkIdAndResourceProvider(work.getId(), resourceProvider);
+                .existsByWorkIdAndResourceProviderAndSourceUrl(work.getId(), resourceProvider, s3ClassPath);
 
         log.info("Book import status for title {} is {}", work.getTitle(), alreadyImported);
 
@@ -125,7 +127,7 @@ public class BookContentSeed implements CommandLineRunner {
             return;
         }
 
-        String s3ClassPath = String.format("s3://%s/%s", bucket, fileName);
+
         bookImportService.importEpub(
                 workKey,
                 BookFormat.EPUB,
