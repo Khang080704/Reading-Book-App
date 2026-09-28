@@ -40,6 +40,9 @@ public class ReadingResource {
 
     private String language;
 
+    @Column(name = "source_url")
+    private String sourceUrl;
+
     public void addChapter(Chapter chapter) {
         chapters.add(chapter);
         chapter.setReadingResource(this);

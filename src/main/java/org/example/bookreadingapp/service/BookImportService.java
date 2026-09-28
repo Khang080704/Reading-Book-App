@@ -72,6 +72,7 @@ public class BookImportService {
                         .resourceProvider(resourceProvider != null ? resourceProvider : ResourceProvider.INTERNAL)
                         .readingMode(ReadingMode.CHAPTER)
                         .language(parsedBook.language())
+                        .sourceUrl(storagePath)
                         .build();
 
 
