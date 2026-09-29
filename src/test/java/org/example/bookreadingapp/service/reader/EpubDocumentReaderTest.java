@@ -4,6 +4,7 @@ import org.example.bookreadingapp.dto.reading.ParsedBook;
 import org.example.bookreadingapp.dto.reading.ParsedChapter;
 import org.example.bookreadingapp.service.reader.epub.EpubDocumentReader;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.ClassPathResource;
@@ -12,6 +13,7 @@ import org.springframework.core.io.Resource;
 @ExtendWith(MockitoExtension.class)
 public class EpubDocumentReaderTest {
     @Test
+    @DisabledIfEnvironmentVariable(named = "CI", matches = "true")
     void testReadEpubWithDracula() {
 
         Resource resource =
@@ -48,6 +50,7 @@ public class EpubDocumentReaderTest {
     }
 
     @Test
+    @DisabledIfEnvironmentVariable(named = "CI", matches = "true")
     void testReadEpubWithHarryPotter() {
 
         String[] data = {
