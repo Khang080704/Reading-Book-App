@@ -80,6 +80,7 @@ jobs:
           docker build \
           -t ${{ secrets.DOCKERHUB_USERNAME }}/book-verse:${{ github.sha }} \
           -t ${{ secrets.DOCKERHUB_USERNAME }}/book-verse:latest \
+          .
 
       - name: Push Docker Image
         run: |
