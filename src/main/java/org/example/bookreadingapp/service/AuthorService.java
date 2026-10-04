@@ -41,7 +41,7 @@ public class AuthorService {
 
     @Cacheable(value = "author", key = "#authorName + '-' + #limit")
     public List<AuthorDTO> searchAuthors(String authorName, int limit) {
-        log.info("Cache miss for searchAuthors with authorName: {}, page: {}, limit: {}", authorName, limit);
+        log.info("Cache miss for searchAuthors with authorName: {}, limit: {}", authorName, limit);
 
         AuthorListResponse response = authorApiClient.getAuthors(authorName, limit);
         return response.getDocs().stream().map(doc -> {

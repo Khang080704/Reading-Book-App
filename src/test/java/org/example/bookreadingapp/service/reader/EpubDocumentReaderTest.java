@@ -2,6 +2,8 @@ package org.example.bookreadingapp.service.reader;
 
 import org.example.bookreadingapp.dto.reading.ParsedBook;
 import org.example.bookreadingapp.dto.reading.ParsedChapter;
+import org.example.bookreadingapp.service.filestorage.BookStorage;
+import org.example.bookreadingapp.service.filestorage.S3Storage;
 import org.example.bookreadingapp.service.reader.epub.EpubDocumentReader;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
