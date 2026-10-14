@@ -86,3 +86,23 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/book-verse:${{ github.sha }}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/book-verse:latest
+
+  deploy:
+    name: SSH and pull image
+    needs: push-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH to server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/bookverse/
+            
+            docker compose pull
+            
+            docker compose up --build -d
+            
+            docker image prune -f
