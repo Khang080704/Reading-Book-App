@@ -59,7 +59,9 @@ public class EpubDocumentReaderTest {
                 "books/HP_And_Champer_Secret.epub",
                 "books/HP_And_Goblet_Of_Fire.epub",
                 "books/HP_And_Prison_Of_Azkaban.epub",
-                "books/HP_And_Halfblood_Prince.epub"
+                "books/HP_And_Halfblood_Prince.epub",
+                "books/HP_And_Order_of_Phoenix.epub",
+                "books/HP_And_Deathly_hallows.epub",
         };
 
         for(String item : data) {

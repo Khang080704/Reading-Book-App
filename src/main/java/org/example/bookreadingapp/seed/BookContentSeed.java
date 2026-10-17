@@ -39,8 +39,11 @@ public class BookContentSeed implements CommandLineRunner {
         seedDracula();
         seedHarryPotterAndSorcererStone();
         seedHarryPotterAndChampterOfSecret();
+        seedHarryPotterAndPrisonOfAzkaban();
         seedHarryPotterAndGobletOfFire();
+        seedHarryPotterAndOrderOfPhoenix();
         seedHarryPotterAndHalfBloodPrince();
+        seedHarryPotterAndDeathlyHallows();
     }
 
     private void seedDracula() {
@@ -64,6 +67,14 @@ public class BookContentSeed implements CommandLineRunner {
 
         seedDataWithAws(workKey, bucket, fileName, ResourceProvider.INTERNAL);
     }
+
+    private void seedHarryPotterAndPrisonOfAzkaban() {
+        String workKey = "OL82536W";
+        String fileName = "HP_And_Prison_Of_Azkaban.epub";
+
+        seedDataWithAws(workKey, bucket, fileName, ResourceProvider.INTERNAL);
+    }
+
     private void seedHarryPotterAndGobletOfFire() {
         String workKey = "OL82560W";
         String fileName = "HP_And_Goblet_Of_Fire.epub";
@@ -71,9 +82,24 @@ public class BookContentSeed implements CommandLineRunner {
         seedDataWithAws(workKey, bucket, fileName, ResourceProvider.INTERNAL);
 
     }
+
+    private void seedHarryPotterAndOrderOfPhoenix() {
+        String workKey = "OL82548W";
+        String fileName = "HP_And_Order_of_Phoenix.epub";
+
+        seedDataWithAws(workKey, bucket, fileName, ResourceProvider.INTERNAL);
+    }
+
     private void seedHarryPotterAndHalfBloodPrince(){
         String workKey = "OL82565W";
         String fileName = "HP_And_Halfblood_Prince.epub";
+
+        seedDataWithAws(workKey, bucket, fileName, ResourceProvider.INTERNAL);
+    }
+
+    private void seedHarryPotterAndDeathlyHallows() {
+        String workKey = "OL82586W";
+        String fileName = "HP_And_Deathly_Hallows.epub";
 
         seedDataWithAws(workKey, bucket, fileName, ResourceProvider.INTERNAL);
     }
